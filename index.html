@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d1b24">
+<link rel="manifest" href="/manifest.webmanifest">
+<title>Minecraft Voice</title>
+<style>
+:root{
+  --bg:#0d1b24; --panel:#14293a; --line:#23455c; --ink:#e9f2f4; --mute:#8aa4b3;
+  --go:#58e08a; --stop:#ff6a5c; --deaf:#f2b84b; --r:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.5 "Noto Sans Thai","Sarabun",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:460px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom))}
+h1{font-size:20px;margin:6px 0 2px;letter-spacing:.2px}
+.sub{color:var(--mute);font-size:14px;margin:0 0 18px}
+.hide{display:none!important}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 14px}
+label{display:block;font-size:14px;color:var(--mute);margin:0 0 6px}
+input[type=text],input[type=tel]{width:100%;background:#0b1720;color:var(--ink);border:1px solid var(--line);
+  border-radius:10px;padding:14px;font-size:24px;letter-spacing:6px;text-align:center}
+input#simName{font-size:18px;letter-spacing:0}
+button{font:inherit;border:0;border-radius:12px;padding:14px 16px;color:#06170e;background:var(--go);
+  font-weight:600;width:100%;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
+button:active{transform:translateY(1px)}
+.err{color:var(--stop);font-size:14px;min-height:20px;margin:8px 0 0}
+.status{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--mute)}
+.dot.ok{background:var(--go)} .dot.bad{background:var(--stop)} .dot.wait{background:var(--deaf)}
+.who{margin-left:auto;color:var(--mute);font-size:14px}
+.ring{display:grid;place-items:center;height:150px;margin:4px 0 12px}
+.ring i{display:block;width:92px;height:92px;border-radius:50%;background:#0b1720;border:2px solid var(--line);
+  transition:box-shadow .08s,border-color .15s;box-shadow:0 0 0 calc(var(--lvl,0)*34px) rgba(88,224,138,.22)}
+.ring i.talk{border-color:var(--go)} .ring i.off{border-color:var(--stop)}
+.ring svg{width:100%;height:100%;padding:24px;fill:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tog{background:#0b1720;color:var(--ink);border:1px solid var(--line);text-align:left;font-weight:500}
+.tog b{display:block;font-size:13px;color:var(--mute);font-weight:400}
+.tog.on{border-color:var(--go)} .tog.warn{border-color:var(--stop)}
+.tog.warn b{color:var(--stop)}
+input[type=range]{width:100%;accent-color:var(--go);margin:6px 0 0}
+.rv{float:right;color:var(--ink);font-weight:600}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+li:first-child{border-top:0}
+li .bar{margin-left:auto;width:70px;height:6px;background:#0b1720;border-radius:3px;overflow:hidden}
+li .bar span{display:block;height:100%;background:var(--go)}
+.note{font-size:13px;color:var(--mute)}
+a.unlink{color:var(--mute);font-size:13px;display:block;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Minecraft Voice</h1>
+  <p class="sub">คุยตามระยะในเกม ยิ่งใกล้ยิ่งดัง</p>
+
+  <!-- เชื่อมครั้งแรก -->
+  <section id="link" class="hide">
+    <div class="card">
+      <div id="codeBox">
+        <label for="code">รหัส 6 หลักที่ขึ้นกลางจอในเกม</label>
+        <input id="code" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="••••••">
+      </div>
+      <div id="simBox" class="hide">
+        <label for="simName">โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง</label>
+        <input id="simName" type="text" placeholder="เช่น Alex">
+      </div>
+      <p class="err" id="linkErr"></p>
+      <button id="linkBtn">เชื่อมต่อ</button>
+    </div>
+    <p class="note">ทำครั้งเดียว ครั้งต่อไปเปิดหน้านี้แล้วแตะเริ่มได้เลย (เข้าเกมก่อนแล้วจะเห็นรหัส)</p>
+  </section>
+
+  <!-- ใช้งาน -->
+  <section id="main" class="hide">
+    <div class="status"><span class="dot" id="dot"></span><span id="stText">กำลังเตรียม…</span><span class="who" id="who"></span></div>
+
+    <button id="startBtn" class="hide" style="margin-bottom:14px">แตะเพื่อเริ่มใช้ไมค์</button>
+
+    <div class="card">
+      <div class="ring"><i id="ringI"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></i></div>
+      <div class="row">
+        <button class="tog" id="micBtn">ไมค์<b id="micTx">เปิด</b></button>
+        <button class="tog" id="earBtn">หูฟัง<b id="earTx">เปิด</b></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>ระยะเสียงของฉัน <span class="rv" id="rangeV">15 บล็อก</span></label>
+      <input id="range" type="range" min="1" max="30" step="1" value="15">
+    </div>
+
+    <div class="card">
+      <label>ได้ยินใครอยู่</label>
+      <ul id="heard"><li class="note">ยังไม่มีใครอยู่ในระยะ</li></ul>
+    </div>
+
+    <div class="card hide" id="sim">
+      <label>โหมดทดสอบ: ตำแหน่งของฉัน (X) <span class="rv" id="xv">0</span></label>
+      <input id="px" type="range" min="-60" max="60" value="0">
+      <label style="margin-top:10px">ตำแหน่ง (Z) <span class="rv" id="zv">0</span></label>
+      <input id="pz" type="range" min="-60" max="60" value="0">
+      <p class="note">เปิดอีกแท็บเป็นอีกชื่อ แล้วเลื่อนห่างกันเพื่อทดสอบเสียงเบา-ดัง</p>
+    </div>
+
+    <p class="note" id="hint"></p>
+    <a class="unlink" href="#" id="unlink">ยกเลิกการเชื่อมบนเครื่องนี้</a>
+  </section>
+</main>
+
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const show = (id) => { for (const s of ["link", "main"]) $("#" + s).classList.toggle("hide", s !== id); };
+const st = { online: false, mic: true, deaf: false, range: 15, speaking: false };
+let token = localStorage.getItem("vc_token");
+let myName = localStorage.getItem("vc_name") || "";
+let simMode = false, ws = null, ctx = null, master = null, stream = null, micOK = false;
+let started = false, helloOK = false, readySent = false, wake = null;
+const voices = new Map();
+
+/* ---------- เชื่อมครั้งแรก ---------- */
+$("#linkBtn").onclick = async () => {
+  $("#linkErr").textContent = "";
+  const body = simMode ? { sim: $("#simName").value } : { code: $("#code").value };
+  try {
+    const r = await fetch("/api/link", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!j.ok) { $("#linkErr").textContent = j.error || "เชื่อมไม่สำเร็จ"; return; }
+    token = j.token; myName = j.name;
+    localStorage.setItem("vc_token", token); localStorage.setItem("vc_name", myName);
+    enterMain(true);
+  } catch { $("#linkErr").textContent = "ติดต่อเซิร์ฟเวอร์ไม่ได้"; }
+};
+$("#unlink").onclick = (e) => { e.preventDefault(); unlink(); };
+function unlink() {
+  localStorage.removeItem("vc_token"); localStorage.removeItem("vc_name");
+  token = null; started = false;
+  if (ws) { ws.onclose = null; ws.close(); ws = null; }
+  if (ctx) { ctx.close(); ctx = null; }
+  if (stream) stream.getTracks().forEach((t) => t.stop());
+  stream = null; voices.clear(); readySent = false; helloOK = false;
+  show("link");
+}
+
+/* ---------- เข้าหน้าใช้งาน ---------- */
+async function enterMain(fromLink) {
+  show("main");
+  $("#who").textContent = myName;
+  $("#sim").classList.toggle("hide", !simMode);
+  setStatus("wait", "แตะเพื่อเริ่มใช้ไมค์");
+  $("#startBtn").classList.remove("hide");
+  let granted = false;
+  try { granted = (await navigator.permissions.query({ name: "microphone" })).state === "granted"; } catch {}
+  if (granted || fromLink) start(); // ถ้าเคยอนุญาตไมค์แล้ว เริ่มเองเลย
+}
+$("#startBtn").onclick = () => { if (!started) start(); else if (ctx) ctx.resume(); };
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (ctx && ctx.state !== "running") ctx.resume(); getWake(); } });
+document.addEventListener("pointerdown", () => { if (ctx && ctx.state !== "running") ctx.resume(); }, { passive: true });
+
+async function getWake() { try { if (navigator.wakeLock && !document.hidden) wake = await navigator.wakeLock.request("screen"); } catch {} }
+
+const WORKLET = [
+  "class P extends AudioWorkletProcessor{",
+  "constructor(){super();this.r=sampleRate/16000;this.ph=0;this.acc=0;this.cnt=0;this.o=new Int16Array(320);this.n=0;this.sq=0;}",
+  "process(i){const c=i[0]&&i[0][0];if(!c)return true;",
+  "for(let k=0;k<c.length;k++){this.acc+=c[k];this.cnt++;this.ph+=1;",
+  "if(this.ph>=this.r){this.ph-=this.r;let v=this.acc/this.cnt;this.acc=0;this.cnt=0;",
+  "v=v>1?1:v<-1?-1:v;this.sq+=v*v;this.o[this.n++]=v<0?v*32768:v*32767;",
+  "if(this.n===320){const rms=Math.sqrt(this.sq/320);this.port.postMessage({pcm:this.o.buffer,rms},[this.o.buffer]);",
+  "this.o=new Int16Array(320);this.n=0;this.sq=0;}}}return true;}}",
+  "registerProcessor('pcm16',P);"
+].join("");
+
+/* ---------- เริ่มเสียง ---------- */
+async function start() {
+  if (started) return;
+  started = true;
+  setStatus("wait", "กำลังเชื่อมต่อ…");
+  ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: "interactive" });
+  master = ctx.createGain(); master.connect(ctx.destination);
+  ctx.onstatechange = () => { updateStart(); maybeReady(); };
+  ctx.resume().catch(() => {});
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } });
+    const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
+    await ctx.audioWorklet.addModule(url);
+    const src = ctx.createMediaStreamSource(stream);
+    const node = new AudioWorkletNode(ctx, "pcm16", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1] });
+    const mute = ctx.createGain(); mute.gain.value = 0;
+    src.connect(node); node.connect(mute); mute.connect(ctx.destination);
+    node.port.onmessage = onMic;
+    micOK = true;
+  } catch (e) {
+    micOK = false;
+    $("#hint").textContent = "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้";
+  }
+  getWake();
+  updateStart();
+  connect();
+}
+function updateStart() {
+  const need = !started || (ctx && ctx.state !== "running");
+  $("#startBtn").classList.toggle("hide", !need);
+}
+
+/* ---------- ตรวจจับเสียงพูด + ส่งเสียง ---------- */
+let floor = 0.004, hang = 0;
+function onMic(e) {
+  const rms = e.data.rms, now = performance.now();
+  const thr = Math.max(0.012, floor * 3.5);
+  if (rms > thr) hang = now + 350; else floor = Math.max(0.002, floor * 0.995 + rms * 0.005);
+  const talking = now < hang;
+  $("#ringI").style.setProperty("--lvl", st.mic && !st.deaf ? Math.min(1, rms * 8).toFixed(2) : 0);
+  if (talking && st.mic && !st.deaf && ws && ws.readyState === 1 && readySent) ws.send(e.data.pcm);
+}
+
+/* ---------- WebSocket ---------- */
+function connect() {
+  if (!token) return;
+  const proto = location.protocol === "https:" ? "wss" : "ws";
+  ws = new WebSocket(proto + "://" + location.host + "/ws");
+  ws.binaryType = "arraybuffer";
+  ws.onopen = () => ws.send(JSON.stringify({ t: "auth", token }));
+  ws.onmessage = (e) => (typeof e.data === "string" ? onText(JSON.parse(e.data)) : onVoice(e.data));
+  ws.onclose = (e) => {
+    helloOK = false; readySent = false;
+    if (e.code === 4002) { unlink(); return; }
+    if (e.code === 4001) { setStatus("bad", "มีอุปกรณ์อื่นเชื่อมแทนแล้ว"); return; }
+    setStatus("wait", "กำลังเชื่อมต่อใหม่…");
+    setTimeout(() => token && started && connect(), 2000);
+  };
+}
+function maybeReady() {
+  if (helloOK && !readySent && ctx && ctx.state === "running") {
+    ws.send(JSON.stringify({ t: "ready" })); readySent = true; render();
+  }
+}
+function onText(m) {
+  if (m.t === "hello") {
+    helloOK = true; myName = m.name; $("#who").textContent = myName;
+    if (m.sim && !simMode) { simMode = true; $("#sim").classList.remove("hide"); }
+    maybeReady(); render();
+  } else if (m.t === "mix") {
+    Object.assign(st, m.me || {});
+    if (!m.me || !m.me.online) st.online = false;
+    applyMix(m); render(m);
+  }
+}
+
+/* ---------- เล่นเสียงตามระยะ ---------- */
+function voiceFor(id) {
+  let v = voices.get(id);
+  if (v) return v;
+  const g = ctx.createGain(); g.gain.value = 0;
+  const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+  if (p) { g.connect(p); p.connect(master); } else g.connect(master);
+  v = { g, p, next: 0 };
+  voices.set(id, v);
+  return v;
+}
+function applyMix(m) {
+  if (!ctx) return;
+  master.gain.setTargetAtTime(st.deaf ? 0 : 1, ctx.currentTime, 0.03);
+  const t = ctx.currentTime;
+  for (const [id, v] of voices) {
+    const x = m.v[id];
+    v.g.gain.setTargetAtTime(x ? x[0] : 0, t, 0.06);
+    if (v.p && x) v.p.pan.setTargetAtTime(x[1], t, 0.06);
+  }
+  for (const id of Object.keys(m.v)) voiceFor(+id).g.gain.setTargetAtTime(m.v[id][0], t, 0.06);
+}
+function onVoice(buf) {
+  if (!ctx || ctx.state !== "running" || st.deaf || buf.byteLength < 4) return;
+  const id = new DataView(buf).getUint16(0);
+  const pcm = new Int16Array(buf, 2, (buf.byteLength - 2) >> 1);
+  const f = new Float32Array(pcm.length);
+  for (let i = 0; i < pcm.length; i++) f[i] = pcm[i] / 32768;
+  const ab = ctx.createBuffer(1, f.length, 16000);
+  ab.copyToChannel(f, 0);
+  const v = voiceFor(id);
+  const s = ctx.createBufferSource();
+  s.buffer = ab; s.connect(v.g);
+  const now = ctx.currentTime;
+  if (v.next < now + 0.02) v.next = now + 0.09; // buffer เล็กน้อยกันเสียงสะดุด
+  if (v.next - now > 0.6) return;                // ดีเลย์สะสมเกิน ทิ้งแพ็กเก็ต
+  s.start(v.next);
+  v.next += ab.duration;
+}
+
+/* ---------- UI ---------- */
+function setStatus(kind, text) { $("#dot").className = "dot " + kind; $("#stText").textContent = text; }
+function render(m) {
+  if (readySent) {
+    if (!st.online) setStatus("wait", "เชื่อมแล้ว รอคุณเข้าเกม");
+    else if (st.deaf) setStatus("ok", "ปิดหูอยู่");
+    else if (!st.mic) setStatus("ok", "ปิดไมค์อยู่");
+    else setStatus("ok", st.speaking ? "กำลังพูด" : "เชื่อมแล้ว");
+  }
+  $("#micTx").textContent = st.mic && !st.deaf ? "เปิด" : "ปิด";
+  $("#micBtn").className = "tog " + (st.mic && !st.deaf ? "on" : "warn");
+  $("#earTx").textContent = st.deaf ? "ปิด" : "เปิด";
+  $("#earBtn").className = "tog " + (st.deaf ? "warn" : "on");
+  const ring = $("#ringI");
+  ring.className = st.deaf || !st.mic ? "off" : st.speaking ? "talk" : "";
+  if (document.activeElement !== $("#range")) $("#range").value = st.range;
+  $("#rangeV").textContent = st.range + " บล็อก";
+  if (m) {
+    const ids = Object.keys(m.v);
+    $("#heard").innerHTML = ids.length
+      ? ids.map((id) => `<li><span>${esc(m.names[id] || "?")}</span><div class="bar"><span style="width:${Math.round(m.v[id][0] * 100)}%"></span></div></li>`).join("")
+      : '<li class="note">ยังไม่มีใครอยู่ในระยะ</li>';
+  }
+}
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const sendSet = (o) => ws && ws.readyState === 1 && ws.send(JSON.stringify({ t: "set", ...o }));
+$("#micBtn").onclick = () => { if (st.deaf) { st.deaf = false; st.mic = true; sendSet({ deaf: false, mic: true }); } else { st.mic = !st.mic; sendSet({ mic: st.mic }); } render(); };
+$("#earBtn").onclick = () => { st.deaf = !st.deaf; sendSet({ deaf: st.deaf }); render(); };
+let rt = 0;
+$("#range").oninput = (e) => { st.range = +e.target.value; $("#rangeV").textContent = st.range + " บล็อก"; clearTimeout(rt); rt = setTimeout(() => sendSet({ range: st.range }), 150); };
+
+/* ---------- โหมดทดสอบ ---------- */
+function sendPos() { if (simMode && ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "pos", x: +$("#px").value, z: +$("#pz").value, yaw: 0 })); }
+$("#px").oninput = () => { $("#xv").textContent = $("#px").value; sendPos(); };
+$("#pz").oninput = () => { $("#zv").textContent = $("#pz").value; sendPos(); };
+setInterval(sendPos, 1000);
+
+/* ---------- เริ่มต้น ---------- */
+(async () => {
+  try { simMode = (await (await fetch("/api/info")).json()).sim === true; } catch {}
+  $("#codeBox").classList.toggle("hide", simMode);
+  $("#simBox").classList.toggle("hide", !simMode);
+  if (token) enterMain(false); else show("link");
+})();
+</script>
+</body>
+</html>
