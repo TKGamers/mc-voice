@@ -3,339 +3,505 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d1b24">
+<meta name="theme-color" content="#06100d">
 <link rel="manifest" href="/manifest.webmanifest">
-<title>Minecraft Voice</title>
+<title>ZoHight Voice</title>
 <style>
 :root{
-  --bg:#0d1b24; --panel:#14293a; --line:#23455c; --ink:#e9f2f4; --mute:#8aa4b3;
-  --go:#58e08a; --stop:#ff6a5c; --deaf:#f2b84b; --r:14px;
+  --bg:#06100d; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09);
+  --ink:#eaf6f1; --mute:#8aa79c; --a:#2cf5b0; --b:#18b6ff; --bad:#ff5d6c; --warn:#ffc24b;
+  --r:18px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
   font:16px/1.5 "Noto Sans Thai","Sarabun",system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:460px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom))}
-h1{font-size:20px;margin:6px 0 2px;letter-spacing:.2px}
-.sub{color:var(--mute);font-size:14px;margin:0 0 18px}
+body{background:
+  radial-gradient(900px 500px at 85% -10%,rgba(44,245,176,.13),transparent 60%),
+  radial-gradient(700px 500px at -10% 30%,rgba(24,182,255,.10),transparent 60%),var(--bg);
+  background-attachment:fixed}
+main{max-width:480px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
 .hide{display:none!important}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 14px}
-label{display:block;font-size:14px;color:var(--mute);margin:0 0 6px}
-input[type=text],input[type=tel]{width:100%;background:#0b1720;color:var(--ink);border:1px solid var(--line);
-  border-radius:10px;padding:14px;font-size:24px;letter-spacing:6px;text-align:center}
-input#simName{font-size:18px;letter-spacing:0}
-button{font:inherit;border:0;border-radius:12px;padding:14px 16px;color:#06170e;background:var(--go);
-  font-weight:600;width:100%;cursor:pointer}
-button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
-button:active{transform:translateY(1px)}
-.err{color:var(--stop);font-size:14px;min-height:20px;margin:8px 0 0}
-.status{display:flex;align-items:center;gap:10px;margin:0 0 14px}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--mute)}
-.dot.ok{background:var(--go)} .dot.bad{background:var(--stop)} .dot.wait{background:var(--deaf)}
-.who{margin-left:auto;color:var(--mute);font-size:14px}
-.ring{display:grid;place-items:center;height:150px;margin:4px 0 12px}
-.ring i{display:block;width:92px;height:92px;border-radius:50%;background:#0b1720;border:2px solid var(--line);
-  transition:box-shadow .08s,border-color .15s;box-shadow:0 0 0 calc(var(--lvl,0)*34px) rgba(88,224,138,.22)}
-.ring i.talk{border-color:var(--go)} .ring i.off{border-color:var(--stop)}
-.ring svg{width:100%;height:100%;padding:24px;fill:var(--ink)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tog{background:#0b1720;color:var(--ink);border:1px solid var(--line);text-align:left;font-weight:500}
-.tog b{display:block;font-size:13px;color:var(--mute);font-weight:400}
-.tog.on{border-color:var(--go)} .tog.warn{border-color:var(--stop)}
-.tog.warn b{color:var(--stop)}
-input[type=range]{width:100%;accent-color:var(--go);margin:6px 0 0}
-.rv{float:right;color:var(--ink);font-weight:600}
+header{display:flex;align-items:center;gap:12px;margin:4px 0 18px}
+.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 6px 22px rgba(44,245,176,.28)}
+.logo svg{width:24px;height:24px;fill:#04130e}
+h1{font-size:19px;margin:0;line-height:1.2;letter-spacing:.2px}
+header p{margin:0;font-size:13px;color:var(--mute)}
+.chip{margin-left:auto;white-space:nowrap;display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:99px;
+  background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--mute)}
+.chip i{width:8px;height:8px;border-radius:50%;background:#51635c}
+.chip.ok i{background:var(--a);box-shadow:0 0 10px var(--a)} .chip.ok{color:var(--ink)}
+.chip.wait i{background:var(--warn)} .chip.warn i{background:var(--bad)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 12px}
+.card h3{margin:0 0 10px;font-size:13px;font-weight:500;color:var(--mute);letter-spacing:.3px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px 18px;font:inherit;font-weight:600;
+  color:#04130e;background:linear-gradient(135deg,var(--a),var(--b));cursor:pointer;
+  box-shadow:0 8px 26px rgba(44,245,176,.22)}
+.btn:active{transform:translateY(1px)} .btn[disabled]{opacity:.55}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:500}
+.err{color:var(--bad);font-size:14px;min-height:21px;margin:8px 2px 0}
+.note{font-size:13px;color:var(--mute);margin:8px 2px 0}
+
+/* ---- เชื่อมครั้งแรก ---- */
+.steps{list-style:none;margin:0 0 14px;padding:0;counter-reset:s}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:7px 0;color:var(--ink);font-size:15px}
+.steps li:before{counter-increment:s;content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;font-size:13px;font-weight:600;color:#04130e;
+  background:linear-gradient(135deg,var(--a),var(--b))}
+input.code{width:100%;background:rgba(0,0,0,.35);color:var(--ink);border:1px solid var(--line);border-radius:14px;
+  padding:14px;font:600 28px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:10px;text-align:center}
+input.code:focus,input.name:focus{outline:2px solid var(--a);outline-offset:1px}
+input.name{width:100%;background:rgba(0,0,0,.35);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:13px;font:inherit}
+
+/* ---- orb ---- */
+.hero{display:grid;justify-items:center;padding:6px 0 4px;text-align:center}
+.orb{position:relative;width:150px;height:150px;display:grid;place-items:center;margin:6px 0 10px;--lvl:0}
+.orb .ring{position:absolute;inset:18px;border-radius:50%;border:2px solid var(--a);opacity:0}
+.orb .core{position:relative;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#16352b,#0a1c16);border:2px solid #20443a;
+  box-shadow:0 0 0 calc(var(--lvl)*26px) rgba(44,245,176,.16),0 10px 40px rgba(0,0,0,.45);
+  transition:border-color .2s,box-shadow .08s}
+.orb svg{width:46px;height:46px;fill:var(--ink);display:none}
+.orb.off svg.m,.orb.idle svg.m,.orb.talk svg.m{display:block}
+.orb.muted svg.x{display:block} .orb.deaf svg.h{display:block}
+.orb.off .core{border-color:#2b3a35;opacity:.7}
+.orb.off svg{fill:#6f857c}
+.orb.idle .core{border-color:#2d7b64}
+.orb.idle .ring{animation:pulse 3.4s ease-out infinite}
+.orb.talk .core{border-color:var(--a)} .orb.talk svg{fill:var(--a)}
+.orb.talk .ring{animation:pulse 1.3s ease-out infinite}
+.orb.talk .ring.r2{animation-delay:.65s}
+.orb.muted .core{border-color:var(--bad)} .orb.muted svg{fill:var(--bad)}
+.orb.deaf .core{border-color:var(--warn)} .orb.deaf svg{fill:var(--warn)}
+@keyframes pulse{0%{transform:scale(.72);opacity:.55}100%{transform:scale(1.28);opacity:0}}
+.who{font-size:21px;font-weight:700;margin:2px 0 0}
+.state{color:var(--mute);margin:0 0 14px;font-size:15px}
+
+/* ---- ปุ่มสลับ ---- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.tog{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;font:inherit;color:var(--ink);
+  background:var(--card);border:1px solid var(--line);cursor:pointer;text-align:left}
+.tog .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(44,245,176,.14);flex:none}
+.tog .ic svg{width:22px;height:22px;fill:var(--a)}
+.tog b{display:block;font-size:15px;font-weight:600;line-height:1.2}
+.tog span{font-size:13px;color:var(--a)}
+.tog.off{border-color:rgba(255,93,108,.45)}
+.tog.off .ic{background:rgba(255,93,108,.14)} .tog.off .ic svg{fill:var(--bad)} .tog.off span{color:var(--bad)}
+
+/* ---- range ---- */
+.rv{display:flex;align-items:baseline;gap:6px;margin:0 0 6px}
+.rv b{font-size:34px;line-height:1;font-weight:700}
+.rv span{color:var(--mute)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:99px;
+  background:linear-gradient(90deg,var(--a),var(--b)) 0/var(--p,50%) 100% no-repeat,rgba(255,255,255,.1)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;margin-top:-9px;
+  background:#fff;border:0;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:rgba(255,255,255,.1)}
+input[type=range]::-moz-range-progress{height:8px;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:0}
+.presets{display:flex;gap:8px;margin-top:8px}
+.presets button{flex:1;padding:8px 0;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--mute);font:inherit;font-size:14px}
+.presets button.on{color:#04130e;background:var(--a);border-color:var(--a);font-weight:600}
+
+/* ---- รายชื่อคนที่ได้ยิน ---- */
 ul{list-style:none;margin:0;padding:0}
-li{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
-li:first-child{border-top:0}
-li .bar{margin-left:auto;width:70px;height:6px;background:#0b1720;border-radius:3px;overflow:hidden}
-li .bar span{display:block;height:100%;background:var(--go)}
-.note{font-size:13px;color:var(--mute)}
-a.unlink{color:var(--mute);font-size:13px;display:block;text-align:center;margin-top:10px}
+.p{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.p:first-child{border-top:0}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;color:#04130e;flex:none}
+.p .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{width:84px;height:7px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
+.empty{color:var(--mute);font-size:14px;padding:4px 0}
+
+.warnbar{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
+  background:rgba(255,93,108,.12);border:1px solid rgba(255,93,108,.5);border-radius:16px;padding:13px 14px;margin:0 0 12px}
+.warnbar b{display:block;font-size:15px} .warnbar span{font-size:13px;color:#ffb8bf}
+.links{display:flex;justify-content:center;gap:22px;margin-top:10px;flex-wrap:wrap}
+.links a{color:var(--mute);font-size:13px;text-decoration:none;padding:6px 2px}
+#toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;
+  background:#10231c;border:1px solid var(--line);padding:11px 16px;border-radius:14px;font-size:14px;max-width:88vw;
+  transition:.25s;pointer-events:none;z-index:9;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
 <main>
-  <h1>Minecraft Voice</h1>
-  <p class="sub">คุยตามระยะในเกม ยิ่งใกล้ยิ่งดัง</p>
+  <header>
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div>
+    <div><h1>ZoHight Voice</h1><p>ระบบไมค์พูดคุยสำหรับเซิฟเวอร์ MCBE สร้างโดย ZoHight(ตัวทดลอง)</p></div>
+    <span class="chip" id="chip"><i></i><span id="chipTx">ออฟไลน์</span></span>
+  </header>
 
   <!-- เชื่อมครั้งแรก -->
   <section id="link" class="hide">
     <div class="card">
-      <div id="codeBox">
-        <label for="code">รหัส 6 หลักที่ขึ้นกลางจอในเกม</label>
-        <input id="code" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="••••••">
-      </div>
-      <div id="simBox" class="hide">
-        <label for="simName">โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง</label>
-        <input id="simName" type="text" placeholder="เช่น Alex">
-      </div>
+      <h3>เชื่อมครั้งเดียว ใช้ได้ตลอด</h3>
+      <ol class="steps">
+        <li>เข้าเซิฟเวอร์เกมจะเห็นรหัส 6 หลักบังคับให้ใส่</li>
+        <li>ดูรหัส 6 หลักที่ขึ้นกลางจอ</li>
+        <li>ใส่รหัสด้านล่าง แล้วกดเชื่อมต่อ</li>
+      </ol>
+      <div id="codeBox"><input class="code" id="code" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="······"></div>
+      <div id="simBox" class="hide"><input class="name" id="simName" type="text" placeholder="โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง"></div>
       <p class="err" id="linkErr"></p>
-      <button id="linkBtn">เชื่อมต่อ</button>
+      <button class="btn" id="linkBtn">เชื่อมต่อ</button>
     </div>
-    <p class="note">ทำครั้งเดียว ครั้งต่อไปเปิดหน้านี้แล้วแตะเริ่มได้เลย (เข้าเกมก่อนแล้วจะเห็นรหัส)</p>
+    <p class="note" id="linkNote">รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที</p>
   </section>
 
   <!-- ใช้งาน -->
   <section id="main" class="hide">
-    <div class="status"><span class="dot" id="dot"></span><span id="stText">กำลังเตรียม…</span><span class="who" id="who"></span></div>
-
-    <button id="startBtn" class="hide" style="margin-bottom:14px">แตะเพื่อเริ่มใช้ไมค์</button>
-
-    <div class="card">
-      <div class="ring"><i id="ringI"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></i></div>
-      <div class="row">
-        <button class="tog" id="micBtn">ไมค์<b id="micTx">เปิด</b></button>
-        <button class="tog" id="earBtn">หูฟัง<b id="earTx">เปิด</b></button>
+    <div class="card hero">
+      <div class="orb off" id="orb">
+        <span class="ring"></span><span class="ring r2"></span>
+        <div class="core">
+          <svg class="m" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg>
+          <svg class="x" viewBox="0 0 24 24"><path d="M19 11h-1.7a5.3 5.3 0 0 1-.4 2L18.2 14.300A7 7 0 0 0 19 11zM3.300 3 2 4.300l6.200 6.200V11a3 3 0 0 0 4.500 2.600l1.500 1.500a5 5 0 0 1-2.200.7 5 5 0 0 1-5-5H5a7 7 0 0 0 6 6.900V21h2v-3.100a7 7 0 0 0 2.400-.8l4.300 4.300L21 20.100 3.300 3zM15 11.200V5a3 3 0 0 0-5.800-1.100L15 9.700z"/></svg>
+          <svg class="h" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg>
+        </div>
       </div>
+      <div class="who" id="who">—</div>
+      <p class="state" id="state">ยังไม่ได้เริ่ม</p>
+      <button class="btn" id="primary">เริ่มใช้งาน</button>
+    </div>
+
+    <button class="warnbar hide" id="micWarn"><div><b>ไมค์ถูกระบบตัด คนอื่นไม่ได้ยินคุณ</b><span>เปิดหน้านี้ค้างไว้บนหน้าจอ หรือแตะที่นี่เพื่อเปิดไมค์ใหม่</span></div></button>
+
+    <div class="grid2">
+      <button class="tog" id="micBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><div><b>ไมค์</b><span id="micTx">เปิด</span></div></button>
+      <button class="tog" id="earBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg></div><div><b>หู</b><span id="earTx">เปิด</span></div></button>
     </div>
 
     <div class="card">
-      <label>ระยะเสียงของฉัน <span class="rv" id="rangeV">15 บล็อก</span></label>
+      <h3>ระยะเสียงของฉัน</h3>
+      <div class="rv"><b id="rangeV">15</b><span>บล็อก</span></div>
       <input id="range" type="range" min="1" max="30" step="1" value="15">
+      <div class="presets" id="presets"><button data-v="5">5</button><button data-v="10">10</button><button data-v="15">15</button><button data-v="20">20</button><button data-v="30">30</button></div>
     </div>
 
     <div class="card">
-      <label>ได้ยินใครอยู่</label>
-      <ul id="heard"><li class="note">ยังไม่มีใครอยู่ในระยะ</li></ul>
+      <h3>ได้ยินใครอยู่ตอนนี้</h3>
+      <ul id="heard"><li class="empty">ยังไม่มีใครอยู่ในระยะ</li></ul>
     </div>
 
     <div class="card hide" id="sim">
-      <label>โหมดทดสอบ: ตำแหน่งของฉัน (X) <span class="rv" id="xv">0</span></label>
+      <h3>โหมดทดสอบ: ตำแหน่งของฉัน</h3>
+      <div class="rv"><span>X</span><b id="xv" style="font-size:22px">0</b></div>
       <input id="px" type="range" min="-60" max="60" value="0">
-      <label style="margin-top:10px">ตำแหน่ง (Z) <span class="rv" id="zv">0</span></label>
+      <div class="rv" style="margin-top:8px"><span>Z</span><b id="zv" style="font-size:22px">0</b></div>
       <input id="pz" type="range" min="-60" max="60" value="0">
-      <p class="note">เปิดอีกแท็บเป็นอีกชื่อ แล้วเลื่อนห่างกันเพื่อทดสอบเสียงเบา-ดัง</p>
     </div>
 
     <p class="note" id="hint"></p>
-    <a class="unlink" href="#" id="unlink">ยกเลิกการเชื่อมบนเครื่องนี้</a>
+    <div class="links">
+      <a href="#" id="stopLink" class="hide">หยุดใช้งาน</a>
+      <a href="#" id="battLink" class="hide">กันระบบปิดแอปเบื้องหลัง</a>
+      <a href="#" id="unlink">ยกเลิกการเชื่อม</a>
+    </div>
   </section>
 </main>
+<div id="toast"></div>
 
 <script>
 "use strict";
 const $ = (s) => document.querySelector(s);
-const show = (id) => { for (const s of ["link", "main"]) $("#" + s).classList.toggle("hide", s !== id); };
-const st = { online: false, mic: true, deaf: false, range: 15, speaking: false };
-let token = localStorage.getItem("vc_token");
-let myName = localStorage.getItem("vc_name") || "";
-let simMode = false, ws = null, ctx = null, master = null, stream = null, micOK = false;
-let started = false, helloOK = false, readySent = false, wake = null;
-const voices = new Map();
+const NATIVE = typeof window.ZV !== "undefined"; // เปิดในแอป Android
+const S = { linked: false, name: "", running: false, conn: "idle", online: false, mic: true, deaf: false,
+  range: 15, speaking: false, level: 0, hear: [], micWarn: false, needTap: false };
+let simMode = false, lastSet = 0;
+
+/* ---------- แสดงผล ---------- */
+function toast(t) { const e = $("#toast"); e.textContent = t; e.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove("show"), 3800); }
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function hue(s) { let h = 0; for (const c of s) h = (h * 31 + c.codePointAt(0)) % 360; return h; }
+
+function render() {
+  $("#link").classList.toggle("hide", S.linked);
+  $("#main").classList.toggle("hide", !S.linked);
+  if (!S.linked) { $("#chip").className = "chip"; $("#chipTx").textContent = "ยังไม่เชื่อม"; return; }
+  let orb = "off", txt = "ยังไม่ได้เริ่ม", chip = "", chipTx = "ออฟไลน์";
+  if (S.running) {
+    if (S.conn !== "connected") { orb = "idle"; txt = S.conn === "reconnecting" ? "กำลังเชื่อมต่อใหม่…" : "กำลังเชื่อมต่อ…"; chip = "wait"; chipTx = "กำลังเชื่อม"; }
+    else if (!S.online) { orb = "idle"; txt = "เชื่อมแล้ว รอคุณเข้าเกม"; chip = "wait"; chipTx = "รอเข้าเกม"; }
+    else if (S.deaf) { orb = "deaf"; txt = "ปิดหูอยู่ (ไมค์ปิดด้วย)"; chip = "warn"; chipTx = "ปิดหู"; }
+    else if (!S.mic) { orb = "muted"; txt = "ปิดไมค์อยู่"; chip = "warn"; chipTx = "ปิดไมค์"; }
+    else if (S.speaking) { orb = "talk"; txt = "กำลังพูด"; chip = "ok"; chipTx = "กำลังพูด"; }
+    else { orb = "idle"; txt = "พร้อมพูด"; chip = "ok"; chipTx = "ออนไลน์"; }
+  }
+  $("#orb").className = "orb " + orb;
+  $("#orb").style.setProperty("--lvl", S.running && S.mic && !S.deaf ? Math.min(1, S.level) : 0);
+  $("#state").textContent = txt;
+  $("#who").textContent = S.name || "—";
+  $("#chip").className = "chip " + chip; $("#chipTx").textContent = chipTx;
+
+  const showPrimary = !S.running || S.needTap;
+  $("#primary").classList.toggle("hide", !showPrimary);
+  $("#primary").textContent = S.running ? "แตะเพื่อเปิดเสียง" : "เริ่มใช้งาน";
+  $("#stopLink").classList.toggle("hide", !(NATIVE && S.running));
+  $("#battLink").classList.toggle("hide", !NATIVE);
+  $("#micWarn").classList.toggle("hide", !(S.micWarn && S.running));
+
+  const micOn = S.mic && !S.deaf;
+  $("#micBtn").classList.toggle("off", !micOn); $("#micTx").textContent = micOn ? "เปิด" : "ปิด";
+  $("#earBtn").classList.toggle("off", S.deaf); $("#earTx").textContent = S.deaf ? "ปิด" : "เปิด";
+  if (document.activeElement !== $("#range")) $("#range").value = S.range;
+  $("#range").style.setProperty("--p", ((S.range - 1) / 29) * 100 + "%");
+  $("#rangeV").textContent = S.range;
+  document.querySelectorAll("#presets button").forEach((b) => b.classList.toggle("on", +b.dataset.v === S.range));
+  $("#heard").innerHTML = S.hear.length
+    ? S.hear.map((p) => `<li class="p"><div class="av" style="background:hsl(${hue(p.n)} 75% 62%)">${esc([...p.n][0] || "?")}</div><div class="nm">${esc(p.n)}</div><div class="bar"><i style="width:${Math.round(p.v * 100)}%"></i></div></li>`).join("")
+    : '<li class="empty">ยังไม่มีใครอยู่ในระยะ</li>';
+  $("#hint").textContent = S.hintText || (NATIVE ? "สลับไปเล่นเกมได้เลย ไมค์ยังทำงานเบื้องหลัง (มีแจ้งเตือนค้างไว้)" : "");
+}
+function setLevel(v) { S.level = v; $("#orb").style.setProperty("--lvl", S.running && S.mic && !S.deaf ? Math.min(1, v) : 0); }
+
+/* ---------- ปุ่มต่างๆ ---------- */
+function sendSet(o) {
+  lastSet = performance.now();
+  if (NATIVE) { if ("mic" in o) ZV.setMic(o.mic); if ("deaf" in o) ZV.setDeaf(o.deaf); if ("range" in o) ZV.setRange(o.range); }
+  else web.sendSet(o);
+}
+$("#micBtn").onclick = () => {
+  lastSet = performance.now();
+  if (S.deaf) { S.deaf = false; S.mic = true; sendSet({ deaf: false }); sendSet({ mic: true }); }
+  else { S.mic = !S.mic; sendSet({ mic: S.mic }); }
+  render();
+};
+$("#earBtn").onclick = () => { lastSet = performance.now(); S.deaf = !S.deaf; sendSet({ deaf: S.deaf }); render(); };
+let rt = 0;
+function setRange(v) { lastSet = performance.now(); S.range = v; render(); clearTimeout(rt); rt = setTimeout(() => sendSet({ range: v }), 150); }
+$("#range").oninput = (e) => setRange(+e.target.value);
+$("#presets").onclick = (e) => { const v = e.target.dataset && +e.target.dataset.v; if (v) setRange(v); };
+$("#primary").onclick = () => { if (NATIVE) ZV.start(); else web.startOrResume(); };
+$("#stopLink").onclick = (e) => { e.preventDefault(); if (NATIVE) ZV.stop(); };
+$("#battLink").onclick = (e) => { e.preventDefault(); if (NATIVE) ZV.batterySettings(); };
+let unlinkArm = 0;
+$("#unlink").onclick = (e) => {
+  e.preventDefault();
+  if (!unlinkArm) { // แตะครั้งแรก: ขอให้ยืนยัน (ไม่ใช้ confirm() เพราะบางแอป/WebView ไม่รองรับ)
+    $("#unlink").textContent = "แตะอีกครั้งเพื่อยืนยันยกเลิกการเชื่อม";
+    unlinkArm = setTimeout(() => { unlinkArm = 0; $("#unlink").textContent = "ยกเลิกการเชื่อม"; }, 4000);
+    return;
+  }
+  clearTimeout(unlinkArm); unlinkArm = 0; $("#unlink").textContent = "ยกเลิกการเชื่อม";
+  if (NATIVE) ZV.unlink(); else web.unlink();
+};
+$("#micWarn").onclick = () => { if (!NATIVE) web.recoverMic(true); };
 
 /* ---------- เชื่อมครั้งแรก ---------- */
 $("#linkBtn").onclick = async () => {
   $("#linkErr").textContent = "";
-  const body = simMode ? { sim: $("#simName").value } : { code: $("#code").value };
+  const code = $("#code").value.replace(/\D/g, "");
+  if (!simMode && code.length !== 6) { $("#linkErr").textContent = "ใส่รหัส 6 หลักให้ครบ"; return; }
+  $("#linkBtn").disabled = true; $("#linkBtn").textContent = "กำลังเชื่อมต่อ… (ครั้งแรกอาจรอได้ถึง 1 นาที)";
+  if (NATIVE) { ZV.link(code); return; }
   try {
+    const body = simMode ? { sim: $("#simName").value } : { code };
     const r = await fetch("/api/link", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
-    if (!j.ok) { $("#linkErr").textContent = j.error || "เชื่อมไม่สำเร็จ"; return; }
-    token = j.token; myName = j.name;
-    localStorage.setItem("vc_token", token); localStorage.setItem("vc_name", myName);
-    enterMain(true);
-  } catch { $("#linkErr").textContent = "ติดต่อเซิร์ฟเวอร์ไม่ได้"; }
+    if (!j.ok) throw new Error(j.error || "เชื่อมไม่สำเร็จ");
+    web.saveLink(j.token, j.name);
+  } catch (e) { $("#linkErr").textContent = e.message || "ติดต่อเซิร์ฟเวอร์ไม่ได้"; }
+  $("#linkBtn").disabled = false; $("#linkBtn").textContent = "เชื่อมต่อ";
 };
-$("#unlink").onclick = (e) => { e.preventDefault(); unlink(); };
-function unlink() {
-  localStorage.removeItem("vc_token"); localStorage.removeItem("vc_name");
-  token = null; started = false;
-  if (ws) { ws.onclose = null; ws.close(); ws = null; }
-  if (ctx) { ctx.close(); ctx = null; }
-  if (stream) stream.getTracks().forEach((t) => t.stop());
-  stream = null; voices.clear(); readySent = false; helloOK = false;
-  show("link");
-}
 
-/* ---------- เข้าหน้าใช้งาน ---------- */
-async function enterMain(fromLink) {
-  show("main");
-  $("#who").textContent = myName;
-  $("#sim").classList.toggle("hide", !simMode);
-  setStatus("wait", "แตะเพื่อเริ่มใช้ไมค์");
-  $("#startBtn").classList.remove("hide");
-  let granted = false;
-  try { granted = (await navigator.permissions.query({ name: "microphone" })).state === "granted"; } catch {}
-  if (granted || fromLink) start(); // ถ้าเคยอนุญาตไมค์แล้ว เริ่มเองเลย
-}
-$("#startBtn").onclick = () => { if (!started) start(); else if (ctx) ctx.resume(); };
-document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (ctx && ctx.state !== "running") ctx.resume(); getWake(); } });
-document.addEventListener("pointerdown", () => { if (ctx && ctx.state !== "running") ctx.resume(); }, { passive: true });
+/* ================== โหมดแอป Android ================== */
+let autoStarted = false;
+window.onNative = (st) => {
+  const { error, ...rest } = st;
+  Object.assign(S, rest);
+  if (error) { toast(error); $("#linkErr").textContent = error; }
+  $("#linkBtn").disabled = false; $("#linkBtn").textContent = "เชื่อมต่อ";
+  if (!S.linked) autoStarted = false;
+  render();
+  if (S.linked && !S.running && !autoStarted) { autoStarted = true; ZV.start(); } // เปิดแอป/เชื่อมเสร็จ แล้วเริ่มให้เอง
+};
 
-async function getWake() { try { if (navigator.wakeLock && !document.hidden) wake = await navigator.wakeLock.request("screen"); } catch {} }
+/* ================== โหมดเว็บเบราว์เซอร์ ================== */
+const web = (() => {
+  let token = localStorage.getItem("vc_token");
+  let ws = null, ctx = null, master = null, stream = null, micOK = false, started = false;
+  let helloOK = false, readySent = false, wake = null;
+  let wnode = null, snode = null, track = null, workletReady = false, recovering = false, lastMic = 0;
+  const voices = new Map();
+  if (token) { S.linked = true; S.name = localStorage.getItem("vc_name") || ""; }
 
-const WORKLET = [
-  "class P extends AudioWorkletProcessor{",
-  "constructor(){super();this.r=sampleRate/16000;this.ph=0;this.acc=0;this.cnt=0;this.o=new Int16Array(320);this.n=0;this.sq=0;}",
-  "process(i){const c=i[0]&&i[0][0];if(!c)return true;",
-  "for(let k=0;k<c.length;k++){this.acc+=c[k];this.cnt++;this.ph+=1;",
-  "if(this.ph>=this.r){this.ph-=this.r;let v=this.acc/this.cnt;this.acc=0;this.cnt=0;",
-  "v=v>1?1:v<-1?-1:v;this.sq+=v*v;this.o[this.n++]=v<0?v*32768:v*32767;",
-  "if(this.n===320){const rms=Math.sqrt(this.sq/320);this.port.postMessage({pcm:this.o.buffer,rms},[this.o.buffer]);",
-  "this.o=new Int16Array(320);this.n=0;this.sq=0;}}}return true;}}",
-  "registerProcessor('pcm16',P);"
-].join("");
+  const WORKLET = [
+    "class P extends AudioWorkletProcessor{",
+    "constructor(){super();this.r=sampleRate/16000;this.ph=0;this.acc=0;this.cnt=0;this.o=new Int16Array(320);this.n=0;this.sq=0;}",
+    "process(i){const c=i[0]&&i[0][0];if(!c)return true;",
+    "for(let k=0;k<c.length;k++){this.acc+=c[k];this.cnt++;this.ph+=1;",
+    "if(this.ph>=this.r){this.ph-=this.r;let v=this.acc/this.cnt;this.acc=0;this.cnt=0;",
+    "v=v>1?1:v<-1?-1:v;this.sq+=v*v;this.o[this.n++]=v<0?v*32768:v*32767;",
+    "if(this.n===320){const rms=Math.sqrt(this.sq/320);this.port.postMessage({pcm:this.o.buffer,rms},[this.o.buffer]);",
+    "this.o=new Int16Array(320);this.n=0;this.sq=0;}}}return true;}}",
+    "registerProcessor('pcm16',P);"
+  ].join("");
 
-/* ---------- เริ่มเสียง ---------- */
-async function start() {
-  if (started) return;
-  started = true;
-  setStatus("wait", "กำลังเชื่อมต่อ…");
-  ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: "interactive" });
-  master = ctx.createGain(); master.connect(ctx.destination);
-  ctx.onstatechange = () => { updateStart(); maybeReady(); };
-  ctx.resume().catch(() => {});
-  try {
+  function saveLink(t, name) { token = t; localStorage.setItem("vc_token", t); localStorage.setItem("vc_name", name); S.linked = true; S.name = name; render(); startOrResume(true); }
+  function unlink() {
+    localStorage.removeItem("vc_token"); localStorage.removeItem("vc_name");
+    token = null; stop(); S.linked = false; S.name = ""; render();
+  }
+  function stop() {
+    started = false; helloOK = false; readySent = false;
+    if (ws) { ws.onclose = null; try { ws.close(); } catch {} ws = null; }
+    if (stream) stream.getTracks().forEach((t) => t.stop());
+    if (ctx) { try { ctx.close(); } catch {} ctx = null; }
+    stream = null; track = null; wnode = null; snode = null; workletReady = false; voices.clear();
+    Object.assign(S, { running: false, conn: "idle", online: false, speaking: false, hear: [], needTap: false, micWarn: false, level: 0 });
+    render();
+  }
+  async function getWake() { try { if (navigator.wakeLock && !document.hidden) wake = await navigator.wakeLock.request("screen"); } catch {} }
+
+  async function start() {
+    if (started) return;
+    started = true; S.running = true; S.conn = "connecting"; S.needTap = false; render();
+    ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: "interactive" });
+    master = ctx.createGain(); master.connect(ctx.destination);
+    ctx.onstatechange = () => { S.needTap = ctx && ctx.state !== "running"; maybeReady(); render(); };
+    ctx.resume().catch(() => {});
+    try { await attachMic(); }
+    catch { micOK = false; S.hintText = "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้"; }
+    S.needTap = ctx.state !== "running";
+    getWake(); render(); connect();
+  }
+  async function startOrResume(fromLink) {
+    if (!started) {
+      if (!fromLink) { /* ผู้ใช้แตะเอง */ }
+      return start();
+    }
+    if (ctx && ctx.state !== "running") await ctx.resume();
+  }
+  async function attachMic() {
+    if (stream) stream.getTracks().forEach((t) => t.stop());
+    try { snode && snode.disconnect(); } catch {}
     stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } });
-    const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
-    await ctx.audioWorklet.addModule(url);
-    const src = ctx.createMediaStreamSource(stream);
-    const node = new AudioWorkletNode(ctx, "pcm16", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1] });
-    const mute = ctx.createGain(); mute.gain.value = 0;
-    src.connect(node); node.connect(mute); mute.connect(ctx.destination);
-    node.port.onmessage = onMic;
-    micOK = true;
-  } catch (e) {
-    micOK = false;
-    $("#hint").textContent = "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้";
+    if (!workletReady) {
+      const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
+      await ctx.audioWorklet.addModule(url);
+      wnode = new AudioWorkletNode(ctx, "pcm16", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1] });
+      const mute = ctx.createGain(); mute.gain.value = 0;
+      wnode.connect(mute); mute.connect(ctx.destination);
+      wnode.port.onmessage = onMic; workletReady = true;
+    }
+    snode = ctx.createMediaStreamSource(stream); snode.connect(wnode);
+    track = stream.getAudioTracks()[0];
+    track.onended = () => warn(true); track.onmute = () => warn(true);
+    track.onunmute = () => { lastMic = performance.now(); warn(false); };
+    lastMic = performance.now(); micOK = true; warn(false);
   }
-  getWake();
-  updateStart();
-  connect();
-}
-function updateStart() {
-  const need = !started || (ctx && ctx.state !== "running");
-  $("#startBtn").classList.toggle("hide", !need);
-}
+  function warn(on) { if (S.micWarn !== on) { S.micWarn = on; render(); } }
+  async function recoverMic(force) {
+    if (!started || !micOK || recovering || (document.hidden && !force)) return;
+    recovering = true;
+    try { await attachMic(); } catch { warn(true); }
+    recovering = false;
+  }
+  setInterval(() => {
+    if (!started || !micOK || !workletReady) return;
+    if (!track || track.readyState === "ended" || track.muted || performance.now() - lastMic > 2500) { warn(true); recoverMic(); }
+  }, 2500);
 
-/* ---------- ตรวจจับเสียงพูด + ส่งเสียง ---------- */
-let floor = 0.004, hang = 0;
-function onMic(e) {
-  const rms = e.data.rms, now = performance.now();
-  const thr = Math.max(0.012, floor * 3.5);
-  if (rms > thr) hang = now + 350; else floor = Math.max(0.002, floor * 0.995 + rms * 0.005);
-  const talking = now < hang;
-  $("#ringI").style.setProperty("--lvl", st.mic && !st.deaf ? Math.min(1, rms * 8).toFixed(2) : 0);
-  if (talking && st.mic && !st.deaf && ws && ws.readyState === 1 && readySent) ws.send(e.data.pcm);
-}
+  let floor = 0.004, hang = 0;
+  function onMic(e) {
+    const rms = e.data.rms, now = performance.now(); lastMic = now;
+    const thr = Math.max(0.012, floor * 3.5);
+    if (rms > thr) hang = now + 350; else floor = Math.max(0.002, floor * 0.995 + rms * 0.005);
+    const active = now < hang && S.mic && !S.deaf;
+    setLevel(Math.min(1, rms * 8));
+    if (active !== S.speaking) { S.speaking = active; render(); }
+    if (active && ws && ws.readyState === 1 && readySent) ws.send(e.data.pcm);
+  }
 
-/* ---------- WebSocket ---------- */
-function connect() {
-  if (!token) return;
-  const proto = location.protocol === "https:" ? "wss" : "ws";
-  ws = new WebSocket(proto + "://" + location.host + "/ws");
-  ws.binaryType = "arraybuffer";
-  ws.onopen = () => ws.send(JSON.stringify({ t: "auth", token }));
-  ws.onmessage = (e) => (typeof e.data === "string" ? onText(JSON.parse(e.data)) : onVoice(e.data));
-  ws.onclose = (e) => {
-    helloOK = false; readySent = false;
-    if (e.code === 4002) { unlink(); return; }
-    if (e.code === 4001) { setStatus("bad", "มีอุปกรณ์อื่นเชื่อมแทนแล้ว"); return; }
-    setStatus("wait", "กำลังเชื่อมต่อใหม่…");
-    setTimeout(() => token && started && connect(), 2000);
-  };
-}
-function maybeReady() {
-  if (helloOK && !readySent && ctx && ctx.state === "running") {
-    ws.send(JSON.stringify({ t: "ready" })); readySent = true; render();
+  function connect() {
+    if (!token) return;
+    ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws");
+    ws.binaryType = "arraybuffer";
+    ws.onopen = () => ws.send(JSON.stringify({ t: "auth", token }));
+    ws.onmessage = (e) => (typeof e.data === "string" ? onText(JSON.parse(e.data)) : onVoice(e.data));
+    ws.onclose = (e) => {
+      helloOK = false; readySent = false; S.online = false;
+      if (e.code === 4002) { unlink(); toast("รหัสเชื่อมหมดอายุ กรุณาเชื่อมใหม่"); return; }
+      if (e.code === 4001) { S.conn = "idle"; S.running = false; started = false; render(); toast("มีอุปกรณ์อื่นเชื่อมแทนแล้ว"); return; }
+      S.conn = "reconnecting"; render();
+      setTimeout(() => token && started && connect(), 2000);
+    };
   }
-}
-function onText(m) {
-  if (m.t === "hello") {
-    helloOK = true; myName = m.name; $("#who").textContent = myName;
-    if (m.sim && !simMode) { simMode = true; $("#sim").classList.remove("hide"); }
-    maybeReady(); render();
-  } else if (m.t === "mix") {
-    Object.assign(st, m.me || {});
-    if (!m.me || !m.me.online) st.online = false;
-    applyMix(m); render(m);
+  function maybeReady() {
+    if (helloOK && !readySent && ctx && ctx.state === "running") { ws.send(JSON.stringify({ t: "ready" })); readySent = true; S.conn = "connected"; render(); }
   }
-}
+  function onText(m) {
+    if (m.t === "hello") {
+      helloOK = true; S.name = m.name; localStorage.setItem("vc_name", m.name);
+      if (m.sim) { simMode = true; $("#sim").classList.remove("hide"); }
+      maybeReady(); render();
+    } else if (m.t === "mix") {
+      const me = m.me || {};
+      S.online = !!me.online;
+      if (me.online && performance.now() - lastSet > 1500) { S.mic = me.mic; S.deaf = me.deaf; S.range = me.range; }
+      S.hear = Object.keys(m.v).map((id) => ({ n: m.names[id] || "?", v: m.v[id][0] }));
+      applyMix(m); render();
+    }
+  }
+  function voiceFor(id) {
+    let v = voices.get(id); if (v) return v;
+    const g = ctx.createGain(); g.gain.value = 0;
+    const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+    if (p) { g.connect(p); p.connect(master); } else g.connect(master);
+    v = { g, p, next: 0 }; voices.set(id, v); return v;
+  }
+  function applyMix(m) {
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    master.gain.setTargetAtTime(S.deaf ? 0 : 1, t, 0.03);
+    for (const [id, v] of voices) { const x = m.v[id]; v.g.gain.setTargetAtTime(x ? x[0] : 0, t, 0.06); if (v.p && x) v.p.pan.setTargetAtTime(x[1], t, 0.06); }
+    for (const id of Object.keys(m.v)) voiceFor(+id).g.gain.setTargetAtTime(m.v[id][0], t, 0.06);
+  }
+  function onVoice(buf) {
+    if (!ctx || ctx.state !== "running" || S.deaf || buf.byteLength < 4) return;
+    const id = new DataView(buf).getUint16(0);
+    const pcm = new Int16Array(buf, 2, (buf.byteLength - 2) >> 1);
+    const f = new Float32Array(pcm.length); for (let i = 0; i < pcm.length; i++) f[i] = pcm[i] / 32768;
+    const ab = ctx.createBuffer(1, f.length, 16000); ab.copyToChannel(f, 0);
+    const v = voiceFor(id), s = ctx.createBufferSource(); s.buffer = ab; s.connect(v.g);
+    const now = ctx.currentTime;
+    if (v.next < now + 0.02) v.next = now + 0.09;
+    if (v.next - now > 0.6) return;
+    s.start(v.next); v.next += ab.duration;
+  }
+  function sendSet(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "set", ...o })); }
 
-/* ---------- เล่นเสียงตามระยะ ---------- */
-function voiceFor(id) {
-  let v = voices.get(id);
-  if (v) return v;
-  const g = ctx.createGain(); g.gain.value = 0;
-  const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-  if (p) { g.connect(p); p.connect(master); } else g.connect(master);
-  v = { g, p, next: 0 };
-  voices.set(id, v);
-  return v;
-}
-function applyMix(m) {
-  if (!ctx) return;
-  master.gain.setTargetAtTime(st.deaf ? 0 : 1, ctx.currentTime, 0.03);
-  const t = ctx.currentTime;
-  for (const [id, v] of voices) {
-    const x = m.v[id];
-    v.g.gain.setTargetAtTime(x ? x[0] : 0, t, 0.06);
-    if (v.p && x) v.p.pan.setTargetAtTime(x[1], t, 0.06);
-  }
-  for (const id of Object.keys(m.v)) voiceFor(+id).g.gain.setTargetAtTime(m.v[id][0], t, 0.06);
-}
-function onVoice(buf) {
-  if (!ctx || ctx.state !== "running" || st.deaf || buf.byteLength < 4) return;
-  const id = new DataView(buf).getUint16(0);
-  const pcm = new Int16Array(buf, 2, (buf.byteLength - 2) >> 1);
-  const f = new Float32Array(pcm.length);
-  for (let i = 0; i < pcm.length; i++) f[i] = pcm[i] / 32768;
-  const ab = ctx.createBuffer(1, f.length, 16000);
-  ab.copyToChannel(f, 0);
-  const v = voiceFor(id);
-  const s = ctx.createBufferSource();
-  s.buffer = ab; s.connect(v.g);
-  const now = ctx.currentTime;
-  if (v.next < now + 0.02) v.next = now + 0.09; // buffer เล็กน้อยกันเสียงสะดุด
-  if (v.next - now > 0.6) return;                // ดีเลย์สะสมเกิน ทิ้งแพ็กเก็ต
-  s.start(v.next);
-  v.next += ab.duration;
-}
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (ctx && ctx.state !== "running") ctx.resume(); getWake(); setTimeout(() => { if (track && (track.muted || track.readyState === "ended")) recoverMic(); }, 300); } });
+  document.addEventListener("pointerdown", () => { if (ctx && ctx.state !== "running") ctx.resume(); }, { passive: true });
 
-/* ---------- UI ---------- */
-function setStatus(kind, text) { $("#dot").className = "dot " + kind; $("#stText").textContent = text; }
-function render(m) {
-  if (readySent) {
-    if (!st.online) setStatus("wait", "เชื่อมแล้ว รอคุณเข้าเกม");
-    else if (st.deaf) setStatus("ok", "ปิดหูอยู่");
-    else if (!st.mic) setStatus("ok", "ปิดไมค์อยู่");
-    else setStatus("ok", st.speaking ? "กำลังพูด" : "เชื่อมแล้ว");
-  }
-  $("#micTx").textContent = st.mic && !st.deaf ? "เปิด" : "ปิด";
-  $("#micBtn").className = "tog " + (st.mic && !st.deaf ? "on" : "warn");
-  $("#earTx").textContent = st.deaf ? "ปิด" : "เปิด";
-  $("#earBtn").className = "tog " + (st.deaf ? "warn" : "on");
-  const ring = $("#ringI");
-  ring.className = st.deaf || !st.mic ? "off" : st.speaking ? "talk" : "";
-  if (document.activeElement !== $("#range")) $("#range").value = st.range;
-  $("#rangeV").textContent = st.range + " บล็อก";
-  if (m) {
-    const ids = Object.keys(m.v);
-    $("#heard").innerHTML = ids.length
-      ? ids.map((id) => `<li><span>${esc(m.names[id] || "?")}</span><div class="bar"><span style="width:${Math.round(m.v[id][0] * 100)}%"></span></div></li>`).join("")
-      : '<li class="note">ยังไม่มีใครอยู่ในระยะ</li>';
-  }
-}
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const sendSet = (o) => ws && ws.readyState === 1 && ws.send(JSON.stringify({ t: "set", ...o }));
-$("#micBtn").onclick = () => { if (st.deaf) { st.deaf = false; st.mic = true; sendSet({ deaf: false, mic: true }); } else { st.mic = !st.mic; sendSet({ mic: st.mic }); } render(); };
-$("#earBtn").onclick = () => { st.deaf = !st.deaf; sendSet({ deaf: st.deaf }); render(); };
-let rt = 0;
-$("#range").oninput = (e) => { st.range = +e.target.value; $("#rangeV").textContent = st.range + " บล็อก"; clearTimeout(rt); rt = setTimeout(() => sendSet({ range: st.range }), 150); };
+  // โหมดทดสอบ
+  const sendPos = () => { if (simMode && ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "pos", x: +$("#px").value, z: +$("#pz").value, yaw: 0 })); };
+  $("#px").oninput = () => { $("#xv").textContent = $("#px").value; sendPos(); };
+  $("#pz").oninput = () => { $("#zv").textContent = $("#pz").value; sendPos(); };
+  setInterval(sendPos, 1000);
 
-/* ---------- โหมดทดสอบ ---------- */
-function sendPos() { if (simMode && ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "pos", x: +$("#px").value, z: +$("#pz").value, yaw: 0 })); }
-$("#px").oninput = () => { $("#xv").textContent = $("#px").value; sendPos(); };
-$("#pz").oninput = () => { $("#zv").textContent = $("#pz").value; sendPos(); };
-setInterval(sendPos, 1000);
+  async function boot() {
+    try { simMode = (await (await fetch("/api/info")).json()).sim === true; } catch {}
+    $("#codeBox").classList.toggle("hide", simMode); $("#simBox").classList.toggle("hide", !simMode);
+    render();
+    if (token) {
+      let granted = false;
+      try { granted = (await navigator.permissions.query({ name: "microphone" })).state === "granted"; } catch {}
+      if (granted) start();
+    }
+  }
+  return { saveLink, unlink, startOrResume, recoverMic, sendSet, boot, get track() { return track; } };
+})();
 
 /* ---------- เริ่มต้น ---------- */
-(async () => {
-  try { simMode = (await (await fetch("/api/info")).json()).sim === true; } catch {}
-  $("#codeBox").classList.toggle("hide", simMode);
-  $("#simBox").classList.toggle("hide", !simMode);
-  if (token) enterMain(false); else show("link");
-})();
+if (NATIVE) {
+  $("#linkNote").textContent = "รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที ติดต่อเซิร์ฟเวอร์ครั้งแรกอาจช้าถึง 1 นาที";
+  try { window.onNative(JSON.parse(ZV.getState())); } catch {}
+} else {
+  web.boot();
+}
 </script>
 </body>
 </html>
