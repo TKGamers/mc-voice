@@ -14,9 +14,11 @@ const { WebSocketServer } = require("ws");
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY || "";
 const SIM = process.env.SIM === "1"; // โหมดทดสอบโดยไม่ต้องเปิดเกม
+// ระยะเสียงสูงสุด (บล็อก) ที่ผู้เล่นตั้งได้ แอดมินปรับได้ด้วยตัวแปร MAX_RANGE (ค่าเริ่มต้น 30)
+const MAX_RANGE = Math.min(500, Math.max(5, Math.round(Number(process.env.MAX_RANGE) || 30)));
 const SECRET = process.env.TOKEN_SECRET || crypto.createHash("sha256").update("vc:" + API_KEY).digest("hex");
 // ไฟล์ทั้งหมดอยู่ในโฟลเดอร์เดียวกัน (อัปโหลดง่ายบนมือถือ) เสิร์ฟเฉพาะ 2 ไฟล์นี้เท่านั้น
-const FILES = { "/": "index.html", "/index.html": "index.html", "/manifest.webmanifest": "manifest.webmanifest" };
+const FILES = { "/": "index.html", "/index.html": "index.html", "/manifest.webmanifest": "manifest.webmanifest", "/icon-192.png": "icon-192.png", "/icon-512.png": "icon-512.png" };
 
 if (!API_KEY || API_KEY.length < 12) {
   console.error("!! ตั้งค่า API_KEY (ยาวอย่างน้อย 12 ตัวอักษร) ใน Environment ก่อนรัน");
@@ -106,6 +108,7 @@ function recompute() {
     }
     c.ws.send(JSON.stringify({
       t: "mix",
+      max: MAX_RANGE,
       v: c.hear || {},
       names,
       me: ps
@@ -141,7 +144,7 @@ const server = http.createServer(async (req, res) => {
         mc.set(p.n, {
           ...old,
           x: num(p.x), y: num(p.y), z: num(p.z), d: String(p.d || "overworld"), yaw: num(p.yaw),
-          mic: p.mic !== false, deaf: p.deaf === true, range: clamp(Math.round(num(p.range, 15)), 1, 30), seen: now,
+          mic: p.mic !== false, deaf: p.deaf === true, range: clamp(Math.round(num(p.range, 15)), 1, MAX_RANGE), seen: now,
         });
       }
       for (const [n, ps] of mc) if (!ps.sim && !seen.has(n)) { if (ps.code) codes.delete(ps.code); mc.delete(n); }
@@ -156,7 +159,7 @@ const server = http.createServer(async (req, res) => {
       const apply = JSON.parse(JSON.stringify(pendingApply));
       for (const k of Object.keys(pendingApply)) delete pendingApply[k];
       recompute();
-      return send(res, 200, { ok: true, p: out, apply });
+      return send(res, 200, { ok: true, p: out, apply, max: MAX_RANGE });
     }
     if (req.method === "POST" && url === "/api/link") {
       if (limited(ipOf(req))) return send(res, 429, { ok: false, error: "ลองบ่อยเกินไป รอสักครู่" });
@@ -172,7 +175,7 @@ const server = http.createServer(async (req, res) => {
       codes.delete(code); ps.code = null;
       return send(res, 200, { ok: true, name, token: makeToken(name) });
     }
-    if (url === "/api/info") return send(res, 200, { ok: true, sim: SIM, players: mc.size });
+    if (url === "/api/info") return send(res, 200, { ok: true, sim: SIM, players: mc.size, max: MAX_RANGE });
     if (req.method === "GET" && FILES[url]) {
       const full = path.join(__dirname, FILES[url]);
       if (fs.existsSync(full)) {
@@ -214,7 +217,7 @@ wss.on("connection", (ws, req) => {
       if (old && old !== c) old.ws.close(4001, "replaced");
       c.name = name; c.id = nextId++; if (nextId > 65000) nextId = 1;
       byName.set(name, c); clients.add(c); clearTimeout(kill);
-      ws.send(JSON.stringify({ t: "hello", name, sim: SIM }));
+      ws.send(JSON.stringify({ t: "hello", name, sim: SIM, max: MAX_RANGE }));
     } else if (!c.name) {
       return;
     } else if (m.t === "ready") {
@@ -223,7 +226,7 @@ wss.on("connection", (ws, req) => {
       const set = {};
       if (typeof m.mic === "boolean") set.mic = m.mic;
       if (typeof m.deaf === "boolean") set.deaf = m.deaf;
-      if (m.range !== undefined) set.range = clamp(Math.round(num(m.range, 15)), 1, 30);
+      if (m.range !== undefined) set.range = clamp(Math.round(num(m.range, 15)), 1, MAX_RANGE);
       const ps = mc.get(c.name);
       if (SIM) {
         if (!ps) mc.set(c.name, { x: 0, y: 64, z: 0, d: "overworld", yaw: 0, mic: true, deaf: false, range: 15, sim: true, ...set });
@@ -252,4 +255,4 @@ setInterval(() => {
 }, 20000);
 if (SIM) setInterval(recompute, 250);
 
-server.listen(PORT, () => console.log(`Voice server พร้อมที่พอร์ต ${PORT}${SIM ? " (โหมดทดสอบ SIM)" : ""}`));
+server.listen(PORT, () => console.log(`Voice server พร้อมที่พอร์ต ${PORT} | ระยะเสียงสูงสุด ${MAX_RANGE} บล็อก${SIM ? " (โหมดทดสอบ SIM)" : ""}`));

@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#06100d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ZoHight Voice">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <title>ZoHight Voice</title>
 <style>
@@ -114,6 +119,12 @@ ul{list-style:none;margin:0;padding:0}
 .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
 .empty{color:var(--mute);font-size:14px;padding:4px 0}
 
+.seg{display:flex;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:14px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--mute);font:inherit;font-size:14px;padding:9px 0;border-radius:11px;cursor:pointer}
+.seg button.on{background:linear-gradient(135deg,var(--a),var(--b));color:#04130e;font-weight:600}
+.row{margin:0 0 16px} .row:last-child{margin:0}
+.row label{display:block;font-size:15px;margin:0 0 7px}
+.row small{display:block;color:var(--mute);font-size:12.5px;margin-top:6px;line-height:1.45}
 .warnbar{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
   background:rgba(255,93,108,.12);border:1px solid rgba(255,93,108,.5);border-radius:16px;padding:13px 14px;margin:0 0 12px}
 .warnbar b{display:block;font-size:15px} .warnbar span{font-size:13px;color:#ffb8bf}
@@ -129,7 +140,7 @@ ul{list-style:none;margin:0;padding:0}
 <main>
   <header>
     <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div>
-    <div><h1>ZoHight Voice</h1><p>ระบบไมค์พูดคุยสำหรับเซิฟเวอร์ MCBE สร้างโดย ZoHight(ตัวทดลอง)</p></div>
+    <div><h1>ZoHight Voice</h1><p>คุยตามระยะในเกม ใกล้ดัง ไกลเบา</p></div>
     <span class="chip" id="chip"><i></i><span id="chipTx">ออฟไลน์</span></span>
   </header>
 
@@ -138,7 +149,7 @@ ul{list-style:none;margin:0;padding:0}
     <div class="card">
       <h3>เชื่อมครั้งเดียว ใช้ได้ตลอด</h3>
       <ol class="steps">
-        <li>เข้าเซิฟเวอร์เกมจะเห็นรหัส 6 หลักบังคับให้ใส่</li>
+        <li>เข้าเกมในเซิร์ฟเวอร์ของเรา</li>
         <li>ดูรหัส 6 หลักที่ขึ้นกลางจอ</li>
         <li>ใส่รหัสด้านล่าง แล้วกดเชื่อมต่อ</li>
       </ol>
@@ -170,7 +181,7 @@ ul{list-style:none;margin:0;padding:0}
 
     <div class="grid2">
       <button class="tog" id="micBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><div><b>ไมค์</b><span id="micTx">เปิด</span></div></button>
-      <button class="tog" id="earBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg></div><div><b>หู</b><span id="earTx">เปิด</span></div></button>
+      <button class="tog" id="earBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg></div><div><b>หูฟัง</b><span id="earTx">เปิด</span></div></button>
     </div>
 
     <div class="card">
@@ -178,6 +189,16 @@ ul{list-style:none;margin:0;padding:0}
       <div class="rv"><b id="rangeV">15</b><span>บล็อก</span></div>
       <input id="range" type="range" min="1" max="30" step="1" value="15">
       <div class="presets" id="presets"><button data-v="5">5</button><button data-v="10">10</button><button data-v="15">15</button><button data-v="20">20</button><button data-v="30">30</button></div>
+    </div>
+
+    <div class="card">
+      <h3>ตั้งค่าเสียง</h3>
+      <div class="row"><label>ตัดเสียงรบกวน</label>
+        <div class="seg" id="nsSeg"><button data-v="0">ปิด</button><button data-v="1">กลาง</button><button data-v="2">แรง</button></div>
+        <small>ตัดเสียงพัดลม แอร์ เสียงซ่า (แรง = ตัดมากขึ้น แต่เสียงพูดอาจบางลงเล็กน้อย)</small></div>
+      <div class="row"><label>กันเสียงสะท้อน</label>
+        <div class="seg" id="echoSeg"><button data-v="auto">อัตโนมัติ</button><button data-v="on">เปิด</button><button data-v="off">ปิด</button></div>
+        <small>ใช้ลำโพงเปิดเสียง ให้เลือก "เปิด" ระบบจะลดไมค์ตอนมีคนอื่นกำลังพูด ถ้าใช้หูฟังเลือก "ปิด" หรือ "อัตโนมัติ" (แอปตรวจหูฟังให้เอง)</small></div>
     </div>
 
     <div class="card">
@@ -193,6 +214,8 @@ ul{list-style:none;margin:0;padding:0}
       <input id="pz" type="range" min="-60" max="60" value="0">
     </div>
 
+    <div class="card hide" id="iosTip"><h3>สำหรับ iPhone / iPad</h3>
+      <p class="note" style="margin:0">iOS จะตัดไมค์ของเว็บเมื่อสลับไปแอปอื่น จึงต้องเปิดหน้านี้ค้างไว้ (iPad แบ่งจอได้) แตะปุ่มแชร์ แล้วเลือก "เพิ่มลงในหน้าจอโฮม" เพื่อเปิดแบบเต็มจอ</p></div>
     <p class="note" id="hint"></p>
     <div class="links">
       <a href="#" id="stopLink" class="hide">หยุดใช้งาน</a>
@@ -208,7 +231,7 @@ ul{list-style:none;margin:0;padding:0}
 const $ = (s) => document.querySelector(s);
 const NATIVE = typeof window.ZV !== "undefined"; // เปิดในแอป Android
 const S = { linked: false, name: "", running: false, conn: "idle", online: false, mic: true, deaf: false,
-  range: 15, speaking: false, level: 0, hear: [], micWarn: false, needTap: false };
+  range: 15, max: 30, ns: 1, echo: "auto", speaking: false, level: 0, hear: [], micWarn: false, needTap: false };
 let simMode = false, lastSet = 0;
 
 /* ---------- แสดงผล ---------- */
@@ -245,14 +268,22 @@ function render() {
   const micOn = S.mic && !S.deaf;
   $("#micBtn").classList.toggle("off", !micOn); $("#micTx").textContent = micOn ? "เปิด" : "ปิด";
   $("#earBtn").classList.toggle("off", S.deaf); $("#earTx").textContent = S.deaf ? "ปิด" : "เปิด";
+  if (presetsFor !== S.max) { presetsFor = S.max; buildPresets(); $("#range").max = S.max; }
   if (document.activeElement !== $("#range")) $("#range").value = S.range;
-  $("#range").style.setProperty("--p", ((S.range - 1) / 29) * 100 + "%");
+  $("#range").style.setProperty("--p", ((S.range - 1) / Math.max(1, S.max - 1)) * 100 + "%");
   $("#rangeV").textContent = S.range;
   document.querySelectorAll("#presets button").forEach((b) => b.classList.toggle("on", +b.dataset.v === S.range));
+  document.querySelectorAll("#nsSeg button").forEach((b) => b.classList.toggle("on", +b.dataset.v === S.ns));
+  document.querySelectorAll("#echoSeg button").forEach((b) => b.classList.toggle("on", b.dataset.v === S.echo));
   $("#heard").innerHTML = S.hear.length
     ? S.hear.map((p) => `<li class="p"><div class="av" style="background:hsl(${hue(p.n)} 75% 62%)">${esc([...p.n][0] || "?")}</div><div class="nm">${esc(p.n)}</div><div class="bar"><i style="width:${Math.round(p.v * 100)}%"></i></div></li>`).join("")
     : '<li class="empty">ยังไม่มีใครอยู่ในระยะ</li>';
   $("#hint").textContent = S.hintText || (NATIVE ? "สลับไปเล่นเกมได้เลย ไมค์ยังทำงานเบื้องหลัง (มีแจ้งเตือนค้างไว้)" : "");
+}
+let presetsFor = 0;
+function buildPresets() {
+  const vals = [...new Set([1 / 6, 1 / 3, 1 / 2, 2 / 3, 1].map((f) => Math.max(1, Math.round(S.max * f))))];
+  $("#presets").innerHTML = vals.map((v) => `<button data-v="${v}">${v}</button>`).join("");
 }
 function setLevel(v) { S.level = v; $("#orb").style.setProperty("--lvl", S.running && S.mic && !S.deaf ? Math.min(1, v) : 0); }
 
@@ -269,6 +300,8 @@ $("#micBtn").onclick = () => {
   render();
 };
 $("#earBtn").onclick = () => { lastSet = performance.now(); S.deaf = !S.deaf; sendSet({ deaf: S.deaf }); render(); };
+$("#nsSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (v === undefined) return; S.ns = +v; render(); if (NATIVE) ZV.setNs(S.ns); else web.setNs(S.ns); };
+$("#echoSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (!v) return; S.echo = v; render(); if (NATIVE) ZV.setEcho(v); else web.setEcho(v); };
 let rt = 0;
 function setRange(v) { lastSet = performance.now(); S.range = v; render(); clearTimeout(rt); rt = setTimeout(() => sendSet({ range: v }), 150); }
 $("#range").oninput = (e) => setRange(+e.target.value);
@@ -318,6 +351,106 @@ window.onNative = (st) => {
   if (S.linked && !S.running && !autoStarted) { autoStarted = true; ZV.start(); } // เปิดแอป/เชื่อมเสร็จ แล้วเริ่มให้เอง
 };
 
+/* ตัวตัดเสียงรบกวน (ทดสอบแล้วว่าให้ผลเหมือนฝั่งแอป) */
+// ตัดเสียงรบกวนแบบสเปกตรัม (Wiener + minimum statistics) สำหรับเสียง 16 kHz
+// รับ/ส่งทีละ 320 ตัวอย่าง (Int16) หน่วงประมาณ 32 ms
+class Denoiser {
+  constructor(level = 1) {
+    this.N = 512; this.H = 256; this.K = 257; this.U = 8; this.V = 12;
+    const N = this.N, K = this.K;
+    this.win = new Float64Array(N);
+    for (let n = 0; n < N; n++) this.win[n] = Math.sin(Math.PI * (n + 0.5) / N);
+    this.cos = new Float64Array(N / 2); this.sin = new Float64Array(N / 2);
+    for (let i = 0; i < N / 2; i++) { this.cos[i] = Math.cos(2 * Math.PI * i / N); this.sin[i] = -Math.sin(2 * Math.PI * i / N); }
+    this.rev = new Int32Array(N);
+    for (let i = 0, bits = Math.log2(N); i < N; i++) { let r = 0; for (let b = 0; b < bits; b++) if (i & (1 << b)) r |= 1 << (bits - 1 - b); this.rev[i] = r; }
+    this.re = new Float64Array(N); this.im = new Float64Array(N);
+    this.S = new Float64Array(K); this.minCur = new Float64Array(K).fill(1e18);
+    this.hist = Array.from({ length: this.U }, () => new Float64Array(K).fill(1e18));
+    this.prevClean = new Float64Array(K); this.gPrev = new Float64Array(K).fill(1);
+    this.G = new Float64Array(K); this.Gs = new Float64Array(K);
+    this.inQ = new Float64Array(N + 1024); this.inLen = 0;
+    this.outAcc = new Float64Array(N); // overlap-add
+    this.outQ = new Float64Array(4096); this.outLen = N; // เติมศูนย์ไว้ N ตัวอย่างแรก (ชดเชยดีเลย์)
+    this.frames = 0; this.u = 0; this.setLevel(level);
+  }
+  setLevel(l) {
+    this.level = l;
+    if (l >= 2) { this.noiseScale = 1.5; this.gMin = 0.035; } else { this.noiseScale = 1.0; this.gMin = 0.11; }
+  }
+  fft(inverse) {
+    const N = this.N, re = this.re, im = this.im, rev = this.rev;
+    for (let i = 0; i < N; i++) { const j = rev[i]; if (j > i) { let t = re[i]; re[i] = re[j]; re[j] = t; t = im[i]; im[i] = im[j]; im[j] = t; } }
+    for (let size = 2; size <= N; size <<= 1) {
+      const half = size >> 1, step = N / size;
+      for (let i = 0; i < N; i += size) {
+        for (let j = 0, k = 0; j < half; j++, k += step) {
+          const wr = this.cos[k], wi = inverse ? -this.sin[k] : this.sin[k];
+          const a = i + j, b = a + half;
+          const tr = re[b] * wr - im[b] * wi, ti = re[b] * wi + im[b] * wr;
+          re[b] = re[a] - tr; im[b] = im[a] - ti; re[a] += tr; im[a] += ti;
+        }
+      }
+    }
+    if (inverse) for (let i = 0; i < N; i++) { re[i] /= N; im[i] /= N; }
+  }
+  frame() {
+    const N = this.N, H = this.H, K = this.K, re = this.re, im = this.im;
+    for (let n = 0; n < N; n++) { re[n] = this.inQ[n] * this.win[n]; im[n] = 0; }
+    this.fft(false);
+    const P = new Float64Array(K);
+    for (let k = 0; k < K; k++) P[k] = re[k] * re[k] + im[k] * im[k];
+    // ติดตามระดับเสียงรบกวน (minimum statistics)
+    const first = this.frames === 0;
+    for (let k = 0; k < K; k++) {
+      this.S[k] = first ? P[k] : 0.85 * this.S[k] + 0.15 * P[k];
+      if (this.S[k] < this.minCur[k]) this.minCur[k] = this.S[k];
+    }
+    this.frames++;
+    if (this.frames % this.V === 0) {
+      this.hist[this.u].set(this.minCur); this.u = (this.u + 1) % this.U;
+      this.minCur.set(this.S);
+    }
+    for (let k = 0; k < K; k++) {
+      let nmin = this.minCur[k];
+      for (let u = 0; u < this.U; u++) if (this.hist[u][k] < nmin) nmin = this.hist[u][k];
+      const noise = Math.max(nmin * 1.7 * this.noiseScale, 1e-3);
+      const gamma = P[k] / noise;
+      let xi = 0.98 * this.prevClean[k] / noise + 0.02 * Math.max(gamma - 1, 0);
+      if (xi < 0.003) xi = 0.003;
+      let g = xi / (1 + xi);
+      this.G[k] = g < this.gMin ? this.gMin : g;
+    }
+    // เกลี่ยตามความถี่ และปล่อยเกนลงช้าๆ (กันคำขาดห้วน / เสียงแปลกๆ)
+    for (let k = 0; k < K; k++) {
+      const a = this.G[k > 0 ? k - 1 : k], b = this.G[k], c = this.G[k < K - 1 ? k + 1 : k];
+      let g = 0.25 * a + 0.5 * b + 0.25 * c;
+      if (g < this.gPrev[k]) g = 0.5 * g + 0.5 * this.gPrev[k];
+      this.Gs[k] = g; this.gPrev[k] = g;
+      this.prevClean[k] = g * g * P[k];
+    }
+    for (let k = 0; k < K; k++) { re[k] *= this.Gs[k]; im[k] *= this.Gs[k]; }
+    for (let k = K; k < N; k++) { re[k] = re[N - k]; im[k] = -im[N - k]; } // สมมาตรสังยุค
+    this.fft(true);
+    for (let n = 0; n < N; n++) this.outAcc[n] += re[n] * this.win[n];
+    // ส่งออก H ตัวอย่างแรก แล้วเลื่อน
+    for (let n = 0; n < H; n++) this.outQ[this.outLen++] = this.outAcc[n];
+    this.outAcc.copyWithin(0, H); this.outAcc.fill(0, N - H);
+  }
+  /** x: Int16Array (ความยาวเท่าไรก็ได้) คืน Int16Array ความยาวเท่ากัน */
+  process(x) {
+    const n = x.length, H = this.H, N = this.N;
+    if (this.inLen + n > this.inQ.length) { const t = new Float64Array(this.inLen + n + 1024); t.set(this.inQ.subarray(0, this.inLen)); this.inQ = t; }
+    for (let i = 0; i < n; i++) this.inQ[this.inLen++] = x[i] / 32768;
+    while (this.inLen >= N) { this.frame(); this.inQ.copyWithin(0, H, this.inLen); this.inLen -= H; }
+    const y = new Int16Array(n);
+    for (let i = 0; i < n; i++) { const v = Math.max(-1, Math.min(1, this.outQ[i])); y[i] = v < 0 ? v * 32768 : v * 32767; }
+    this.outQ.copyWithin(0, n, this.outLen); this.outLen -= n;
+    return y;
+  }
+}
+
+
 /* ================== โหมดเว็บเบราว์เซอร์ ================== */
 const web = (() => {
   let token = localStorage.getItem("vc_token");
@@ -326,6 +459,11 @@ const web = (() => {
   let wnode = null, snode = null, track = null, workletReady = false, recovering = false, lastMic = 0;
   const voices = new Map();
   if (token) { S.linked = true; S.name = localStorage.getItem("vc_name") || ""; }
+  { const n = localStorage.getItem("vc_ns"), e = localStorage.getItem("vc_echo"); if (n !== null) S.ns = +n; if (e) S.echo = e; }
+  let dn = null, farLevel = 0;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone = window.navigator.standalone === true || (window.matchMedia && matchMedia("(display-mode: standalone)").matches);
+  if (isIOS && !standalone) $("#iosTip").classList.remove("hide");
 
   const WORKLET = [
     "class P extends AudioWorkletProcessor{",
@@ -358,6 +496,7 @@ const web = (() => {
   async function start() {
     if (started) return;
     started = true; S.running = true; S.conn = "connecting"; S.needTap = false; render();
+    try { if (navigator.audioSession) navigator.audioSession.type = "play-and-record"; } catch {}
     ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: "interactive" });
     master = ctx.createGain(); master.connect(ctx.destination);
     ctx.onstatechange = () => { S.needTap = ctx && ctx.state !== "running"; maybeReady(); render(); };
@@ -377,7 +516,7 @@ const web = (() => {
   async function attachMic() {
     if (stream) stream.getTracks().forEach((t) => t.stop());
     try { snode && snode.disconnect(); } catch {}
-    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } });
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: S.ns > 0, autoGainControl: true, channelCount: 1 } });
     if (!workletReady) {
       const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
       await ctx.audioWorklet.addModule(url);
@@ -406,13 +545,19 @@ const web = (() => {
 
   let floor = 0.004, hang = 0;
   function onMic(e) {
-    const rms = e.data.rms, now = performance.now(); lastMic = now;
-    const thr = Math.max(0.012, floor * 3.5);
+    const now = performance.now(); lastMic = now;
+    let pcm = new Int16Array(e.data.pcm);
+    if (S.ns > 0) { if (!dn) dn = new Denoiser(S.ns); else if (dn.level !== S.ns) dn.setLevel(S.ns); pcm = dn.process(pcm); }
+    let q = 0; for (let i = 0; i < pcm.length; i++) { const f = pcm[i] / 32768; q += f * f; }
+    const rms = Math.sqrt(q / pcm.length);
+    farLevel *= 0.97;
+    const guard = S.echo !== "off" ? farLevel * 0.35 : 0; // ใช้ลำโพง: ถ้ามีคนอื่นกำลังพูดดัง ไมค์ต้องดังกว่านี้ถึงจะส่ง
+    const thr = Math.max(0.012, floor * 3.5, guard);
     if (rms > thr) hang = now + 350; else floor = Math.max(0.002, floor * 0.995 + rms * 0.005);
     const active = now < hang && S.mic && !S.deaf;
     setLevel(Math.min(1, rms * 8));
     if (active !== S.speaking) { S.speaking = active; render(); }
-    if (active && ws && ws.readyState === 1 && readySent) ws.send(e.data.pcm);
+    if (active && ws && ws.readyState === 1 && readySent) ws.send(pcm.buffer);
   }
 
   function connect() {
@@ -434,11 +579,12 @@ const web = (() => {
   }
   function onText(m) {
     if (m.t === "hello") {
-      helloOK = true; S.name = m.name; localStorage.setItem("vc_name", m.name);
+      helloOK = true; S.name = m.name; localStorage.setItem("vc_name", m.name); if (m.max) S.max = m.max;
       if (m.sim) { simMode = true; $("#sim").classList.remove("hide"); }
       maybeReady(); render();
     } else if (m.t === "mix") {
       const me = m.me || {};
+      if (m.max) S.max = m.max;
       S.online = !!me.online;
       if (me.online && performance.now() - lastSet > 1500) { S.mic = me.mic; S.deaf = me.deaf; S.range = me.range; }
       S.hear = Object.keys(m.v).map((id) => ({ n: m.names[id] || "?", v: m.v[id][0] }));
@@ -463,7 +609,8 @@ const web = (() => {
     if (!ctx || ctx.state !== "running" || S.deaf || buf.byteLength < 4) return;
     const id = new DataView(buf).getUint16(0);
     const pcm = new Int16Array(buf, 2, (buf.byteLength - 2) >> 1);
-    const f = new Float32Array(pcm.length); for (let i = 0; i < pcm.length; i++) f[i] = pcm[i] / 32768;
+    const f = new Float32Array(pcm.length); let sq = 0; for (let i = 0; i < pcm.length; i++) { f[i] = pcm[i] / 32768; sq += f[i] * f[i]; }
+    const v0 = voices.get(id); const lvl = Math.sqrt(sq / pcm.length) * (v0 ? v0.g.gain.value : 0); if (lvl > farLevel) farLevel = lvl;
     const ab = ctx.createBuffer(1, f.length, 16000); ab.copyToChannel(f, 0);
     const v = voiceFor(id), s = ctx.createBufferSource(); s.buffer = ab; s.connect(v.g);
     const now = ctx.currentTime;
@@ -472,6 +619,8 @@ const web = (() => {
     s.start(v.next); v.next += ab.duration;
   }
   function sendSet(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "set", ...o })); }
+  function setNs(v) { localStorage.setItem("vc_ns", v); if (track && track.applyConstraints) track.applyConstraints({ noiseSuppression: v > 0 }).catch(() => {}); }
+  function setEcho(v) { localStorage.setItem("vc_echo", v); }
 
   document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (ctx && ctx.state !== "running") ctx.resume(); getWake(); setTimeout(() => { if (track && (track.muted || track.readyState === "ended")) recoverMic(); }, 300); } });
   document.addEventListener("pointerdown", () => { if (ctx && ctx.state !== "running") ctx.resume(); }, { passive: true });
@@ -492,7 +641,7 @@ const web = (() => {
       if (granted) start();
     }
   }
-  return { saveLink, unlink, startOrResume, recoverMic, sendSet, boot, get track() { return track; } };
+  return { saveLink, unlink, startOrResume, recoverMic, sendSet, setNs, setEcho, boot, get track() { return track; } };
 })();
 
 /* ---------- เริ่มต้น ---------- */
