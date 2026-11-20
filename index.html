@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06100d">
+<meta name="theme-color" content="#080519">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,125 +13,125 @@
 <title>ZoHight Voice</title>
 <style>
 :root{
-  --bg:#06100d; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09);
-  --ink:#eaf6f1; --mute:#8aa79c; --a:#2cf5b0; --b:#18b6ff; --bad:#ff5d6c; --warn:#ffc24b;
-  --r:18px;
+  --bg:#080519; --bg2:#150c3d; --glow1:rgba(139,92,246,.34); --glow2:rgba(56,189,248,.24);
+  --card:rgba(255,255,255,.07); --line:rgba(255,255,255,.15); --ink:#fff; --mute:#bdb8e3;
+  --a:#8b5cf6; --b:#38bdf8; --ok:#7dd3fc; --warn:#fbbf24; --bad:#fb7185; --r:20px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+html,body{margin:0;min-height:100%;color:var(--ink);background:var(--bg);
   font:16px/1.5 "Noto Sans Thai","Sarabun",system-ui,-apple-system,"Segoe UI",sans-serif}
 body{background:
-  radial-gradient(900px 500px at 85% -10%,rgba(44,245,176,.13),transparent 60%),
-  radial-gradient(700px 500px at -10% 30%,rgba(24,182,255,.10),transparent 60%),var(--bg);
-  background-attachment:fixed}
-main{max-width:480px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom))}
+  radial-gradient(760px 520px at 88% -8%,var(--glow1),transparent 62%),
+  radial-gradient(680px 520px at -12% 28%,var(--glow2),transparent 62%),
+  linear-gradient(180deg,var(--bg2),var(--bg) 70%);background-attachment:fixed}
+main{max-width:480px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px max(30px,env(safe-area-inset-bottom))}
 .hide{display:none!important}
 header{display:flex;align-items:center;gap:12px;margin:4px 0 18px}
-.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 6px 22px rgba(44,245,176,.28)}
-.logo svg{width:24px;height:24px;fill:#04130e}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 8px 26px rgba(139,92,246,.45)}
+.logo svg{width:25px;height:25px;fill:#fff}
 h1{font-size:19px;margin:0;line-height:1.2;letter-spacing:.2px}
 header p{margin:0;font-size:13px;color:var(--mute)}
 .chip{margin-left:auto;white-space:nowrap;display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:99px;
   background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--mute)}
-.chip i{width:8px;height:8px;border-radius:50%;background:#51635c}
-.chip.ok i{background:var(--a);box-shadow:0 0 10px var(--a)} .chip.ok{color:var(--ink)}
+.chip i{width:8px;height:8px;border-radius:50%;background:#6b6592}
+.chip.ok{color:var(--ink)} .chip.ok i{background:var(--ok);box-shadow:0 0 10px var(--ok)}
 .chip.wait i{background:var(--warn)} .chip.warn i{background:var(--bad)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 12px;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .card h3{margin:0 0 10px;font-size:13px;font-weight:500;color:var(--mute);letter-spacing:.3px}
-.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px 18px;font:inherit;font-weight:600;
-  color:#04130e;background:linear-gradient(135deg,var(--a),var(--b));cursor:pointer;
-  box-shadow:0 8px 26px rgba(44,245,176,.22)}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px 18px;font:inherit;font-weight:600;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 10px 28px rgba(139,92,246,.38)}
 .btn:active{transform:translateY(1px)} .btn[disabled]{opacity:.55}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:500}
+.btn.sm{width:auto;padding:10px 18px;border-radius:14px}
+.btn.red{background:linear-gradient(135deg,#f43f5e,#fb7185);box-shadow:0 10px 26px rgba(244,63,94,.35)}
 .err{color:var(--bad);font-size:14px;min-height:21px;margin:8px 2px 0}
 .note{font-size:13px;color:var(--mute);margin:8px 2px 0}
 
-/* ---- เชื่อมครั้งแรก ---- */
 .steps{list-style:none;margin:0 0 14px;padding:0;counter-reset:s}
-.steps li{display:flex;gap:12px;align-items:flex-start;padding:7px 0;color:var(--ink);font-size:15px}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:7px 0;font-size:15px}
 .steps li:before{counter-increment:s;content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;
-  display:grid;place-items:center;font-size:13px;font-weight:600;color:#04130e;
-  background:linear-gradient(135deg,var(--a),var(--b))}
-input.code{width:100%;background:rgba(0,0,0,.35);color:var(--ink);border:1px solid var(--line);border-radius:14px;
-  padding:14px;font:600 28px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:10px;text-align:center}
+  display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--a),var(--b))}
+input.code,input.name{width:100%;background:rgba(0,0,0,.32);color:var(--ink);border:1px solid var(--line);border-radius:14px;text-align:center}
+input.code{padding:14px;font:600 28px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:10px}
+input.name{padding:13px;font:inherit}
 input.code:focus,input.name:focus{outline:2px solid var(--a);outline-offset:1px}
-input.name{width:100%;background:rgba(0,0,0,.35);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:13px;font:inherit}
 
-/* ---- orb ---- */
-.hero{display:grid;justify-items:center;padding:6px 0 4px;text-align:center}
-.orb{position:relative;width:150px;height:150px;display:grid;place-items:center;margin:6px 0 10px;--lvl:0}
-.orb .ring{position:absolute;inset:18px;border-radius:50%;border:2px solid var(--a);opacity:0}
-.orb .core{position:relative;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;
-  background:radial-gradient(circle at 35% 30%,#16352b,#0a1c16);border:2px solid #20443a;
-  box-shadow:0 0 0 calc(var(--lvl)*26px) rgba(44,245,176,.16),0 10px 40px rgba(0,0,0,.45);
-  transition:border-color .2s,box-shadow .08s}
-.orb svg{width:46px;height:46px;fill:var(--ink);display:none}
+.hero{display:grid;justify-items:center;padding:8px 0 4px;text-align:center}
+.orb{position:relative;width:158px;height:158px;display:grid;place-items:center;margin:6px 0 10px;--lvl:0}
+.orb .ring{position:absolute;inset:20px;border-radius:50%;border:2px solid var(--b);opacity:0}
+.orb .core{position:relative;width:108px;height:108px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 28%,#2a1d6b,#0d0830);border:2px solid transparent;
+  background-clip:padding-box;
+  box-shadow:0 0 0 2px rgba(139,92,246,.55),0 0 0 calc(var(--lvl)*28px) rgba(56,189,248,.20),0 12px 40px rgba(0,0,0,.5);
+  transition:box-shadow .08s}
+.orb svg{width:48px;height:48px;fill:#fff;display:none}
 .orb.off svg.m,.orb.idle svg.m,.orb.talk svg.m{display:block}
-.orb.muted svg.x{display:block} .orb.deaf svg.h{display:block}
-.orb.off .core{border-color:#2b3a35;opacity:.7}
-.orb.off svg{fill:#6f857c}
-.orb.idle .core{border-color:#2d7b64}
-.orb.idle .ring{animation:pulse 3.4s ease-out infinite}
-.orb.talk .core{border-color:var(--a)} .orb.talk svg{fill:var(--a)}
-.orb.talk .ring{animation:pulse 1.3s ease-out infinite}
-.orb.talk .ring.r2{animation-delay:.65s}
-.orb.muted .core{border-color:var(--bad)} .orb.muted svg{fill:var(--bad)}
-.orb.deaf .core{border-color:var(--warn)} .orb.deaf svg{fill:var(--warn)}
-@keyframes pulse{0%{transform:scale(.72);opacity:.55}100%{transform:scale(1.28);opacity:0}}
+.orb.muted svg.x{display:block} .orb.deaf svg.h{display:block} .orb.call svg.p{display:block}
+.orb.off .core{opacity:.65;box-shadow:0 0 0 2px rgba(255,255,255,.18)}
+.orb.off svg{fill:#8f89bd}
+.orb.idle .ring{animation:pulse 3.4s ease-out infinite;border-color:var(--a)}
+.orb.talk .core{box-shadow:0 0 0 3px #fff,0 0 0 calc(var(--lvl)*28px + 6px) rgba(56,189,248,.35),0 0 38px rgba(139,92,246,.7)}
+.orb.talk .ring{animation:pulse 1.3s ease-out infinite} .orb.talk .ring.r2{animation-delay:.65s}
+.orb.muted .core{box-shadow:0 0 0 3px var(--bad)} .orb.muted svg{fill:var(--bad)}
+.orb.deaf .core{box-shadow:0 0 0 3px var(--warn)} .orb.deaf svg{fill:var(--warn)}
+.orb.call .core{box-shadow:0 0 0 3px var(--ok),0 0 34px rgba(56,189,248,.55)} .orb.call svg{fill:var(--ok)}
+@keyframes pulse{0%{transform:scale(.72);opacity:.6}100%{transform:scale(1.3);opacity:0}}
 .who{font-size:21px;font-weight:700;margin:2px 0 0}
 .state{color:var(--mute);margin:0 0 14px;font-size:15px}
 
-/* ---- ปุ่มสลับ ---- */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
-.tog{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;font:inherit;color:var(--ink);
-  background:var(--card);border:1px solid var(--line);cursor:pointer;text-align:left}
-.tog .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(44,245,176,.14);flex:none}
-.tog .ic svg{width:22px;height:22px;fill:var(--a)}
-.tog b{display:block;font-size:15px;font-weight:600;line-height:1.2}
-.tog span{font-size:13px;color:var(--a)}
-.tog.off{border-color:rgba(255,93,108,.45)}
-.tog.off .ic{background:rgba(255,93,108,.14)} .tog.off .ic svg{fill:var(--bad)} .tog.off span{color:var(--bad)}
+.callcard{display:flex;align-items:center;gap:12px;border-color:rgba(56,189,248,.55);
+  background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(56,189,248,.18))}
+.callcard .ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(255,255,255,.14);flex:none}
+.callcard .ic svg{width:22px;height:22px;fill:#fff}
+.callcard .tx{flex:1;min-width:0} .callcard b{display:block;font-size:15px} .callcard span{font-size:13px;color:var(--mute)}
 
-/* ---- range ---- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.tog{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;font:inherit;color:var(--ink);
+  background:var(--card);border:1px solid var(--line);cursor:pointer;text-align:left}
+.tog .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(139,92,246,.28);flex:none}
+.tog .ic svg{width:22px;height:22px;fill:#fff}
+.tog b{display:block;font-size:15px;font-weight:600;line-height:1.2}
+.tog span{font-size:13px;color:var(--ok)}
+.tog.off{border-color:rgba(251,113,133,.55)} .tog.off .ic{background:rgba(251,113,133,.22)} .tog.off span{color:var(--bad)}
+
 .rv{display:flex;align-items:baseline;gap:6px;margin:0 0 6px}
-.rv b{font-size:34px;line-height:1;font-weight:700}
-.rv span{color:var(--mute)}
+.rv b{font-size:34px;line-height:1;font-weight:700} .rv span{color:var(--mute)}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;margin:0}
 input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:99px;
-  background:linear-gradient(90deg,var(--a),var(--b)) 0/var(--p,50%) 100% no-repeat,rgba(255,255,255,.1)}
+  background:linear-gradient(90deg,var(--a),var(--b)) 0/var(--p,50%) 100% no-repeat,rgba(255,255,255,.14)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;margin-top:-9px;
-  background:#fff;border:0;box-shadow:0 2px 10px rgba(0,0,0,.5)}
-input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:rgba(255,255,255,.1)}
+  background:#fff;border:0;box-shadow:0 2px 12px rgba(0,0,0,.55)}
+input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:rgba(255,255,255,.14)}
 input[type=range]::-moz-range-progress{height:8px;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
 input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:0}
 .presets{display:flex;gap:8px;margin-top:8px}
 .presets button{flex:1;padding:8px 0;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--mute);font:inherit;font-size:14px}
-.presets button.on{color:#04130e;background:var(--a);border-color:var(--a);font-weight:600}
-
-/* ---- รายชื่อคนที่ได้ยิน ---- */
-ul{list-style:none;margin:0;padding:0}
-.p{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
-.p:first-child{border-top:0}
-.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;color:#04130e;flex:none}
-.p .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bar{width:84px;height:7px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
-.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
-.empty{color:var(--mute);font-size:14px;padding:4px 0}
+.presets button.on{color:#fff;background:linear-gradient(135deg,var(--a),var(--b));border-color:transparent;font-weight:600}
+.sub{display:block;color:var(--mute);font-size:12.5px;margin-top:6px;line-height:1.45}
 
 .seg{display:flex;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:14px;padding:3px;gap:3px}
 .seg button{flex:1;border:0;background:transparent;color:var(--mute);font:inherit;font-size:14px;padding:9px 0;border-radius:11px;cursor:pointer}
-.seg button.on{background:linear-gradient(135deg,var(--a),var(--b));color:#04130e;font-weight:600}
+.seg button.on{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;font-weight:600}
 .row{margin:0 0 16px} .row:last-child{margin:0}
 .row label{display:block;font-size:15px;margin:0 0 7px}
-.row small{display:block;color:var(--mute);font-size:12.5px;margin-top:6px;line-height:1.45}
+
+ul{list-style:none;margin:0;padding:0}
+.p{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.p:first-child{border-top:0}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;color:#fff;flex:none}
+.p .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p .nm em{font-style:normal;color:var(--ok);font-size:12px;margin-left:6px}
+.bar{width:84px;height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
+.empty{color:var(--mute);font-size:14px;padding:4px 0}
 .warnbar{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
-  background:rgba(255,93,108,.12);border:1px solid rgba(255,93,108,.5);border-radius:16px;padding:13px 14px;margin:0 0 12px}
-.warnbar b{display:block;font-size:15px} .warnbar span{font-size:13px;color:#ffb8bf}
+  background:rgba(251,113,133,.14);border:1px solid rgba(251,113,133,.55);border-radius:16px;padding:13px 14px;margin:0 0 12px}
+.warnbar b{display:block;font-size:15px} .warnbar span{font-size:13px;color:#fecdd3}
 .links{display:flex;justify-content:center;gap:22px;margin-top:10px;flex-wrap:wrap}
 .links a{color:var(--mute);font-size:13px;text-decoration:none;padding:6px 2px}
 #toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;
-  background:#10231c;border:1px solid var(--line);padding:11px 16px;border-radius:14px;font-size:14px;max-width:88vw;
+  background:#1b1250;border:1px solid var(--line);padding:11px 16px;border-radius:14px;font-size:14px;max-width:88vw;
   transition:.25s;pointer-events:none;z-index:9;text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -140,70 +140,88 @@ ul{list-style:none;margin:0;padding:0}
 <main>
   <header>
     <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div>
-    <div><h1>ZoHight Voice</h1><p>คุยตามระยะในเกม ใกล้ดัง ไกลเบา</p></div>
-    <span class="chip" id="chip"><i></i><span id="chipTx">ออฟไลน์</span></span>
+    <div><h1 data-t="appName">ZoHight Voice</h1><p data-t="tagline"></p></div>
+    <span class="chip" id="chip"><i></i><span id="chipTx"></span></span>
   </header>
 
-  <!-- เชื่อมครั้งแรก -->
   <section id="link" class="hide">
     <div class="card">
-      <h3>เชื่อมครั้งเดียว ใช้ได้ตลอด</h3>
-      <ol class="steps">
-        <li>เข้าเกมในเซิร์ฟเวอร์ของเรา</li>
-        <li>ดูรหัส 6 หลักที่ขึ้นกลางจอ</li>
-        <li>ใส่รหัสด้านล่าง แล้วกดเชื่อมต่อ</li>
-      </ol>
-      <div id="codeBox"><input class="code" id="code" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="······"></div>
-      <div id="simBox" class="hide"><input class="name" id="simName" type="text" placeholder="โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง"></div>
+      <h3 data-t="linkTitle"></h3>
+      <ol class="steps"><li data-t="step1"></li><li data-t="step2"></li><li data-t="step3"></li></ol>
+      <div id="codeBox"><input class="code" id="code" type="tel" inputmode="numeric" maxlength="6" autocomplete="off" data-ph="codePlaceholder"></div>
+      <div id="simBox" class="hide"><input class="name" id="simName" type="text" data-ph="simPlaceholder"></div>
       <p class="err" id="linkErr"></p>
-      <button class="btn" id="linkBtn">เชื่อมต่อ</button>
+      <button class="btn" id="linkBtn" data-t="linkBtn"></button>
     </div>
-    <p class="note" id="linkNote">รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที</p>
+    <p class="note" id="linkNote" data-t="linkNote"></p>
   </section>
 
-  <!-- ใช้งาน -->
   <section id="main" class="hide">
     <div class="card hero">
       <div class="orb off" id="orb">
         <span class="ring"></span><span class="ring r2"></span>
         <div class="core">
           <svg class="m" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg>
-          <svg class="x" viewBox="0 0 24 24"><path d="M19 11h-1.7a5.3 5.3 0 0 1-.4 2L18.2 14.300A7 7 0 0 0 19 11zM3.300 3 2 4.300l6.200 6.200V11a3 3 0 0 0 4.500 2.600l1.500 1.500a5 5 0 0 1-2.200.7 5 5 0 0 1-5-5H5a7 7 0 0 0 6 6.900V21h2v-3.100a7 7 0 0 0 2.400-.8l4.300 4.300L21 20.100 3.300 3zM15 11.200V5a3 3 0 0 0-5.800-1.100L15 9.700z"/></svg>
+          <svg class="x" viewBox="0 0 24 24"><path d="M19 11h-1.7a5.3 5.3 0 0 1-.4 2L18.2 14.3A7 7 0 0 0 19 11zM3.3 3 2 4.3l6.2 6.2V11a3 3 0 0 0 4.5 2.6l1.5 1.5a5 5 0 0 1-2.2.7 5 5 0 0 1-5-5H5a7 7 0 0 0 6 6.9V21h2v-3.1a7 7 0 0 0 2.4-.8l4.3 4.3L21 20.1 3.3 3zM15 11.2V5a3 3 0 0 0-5.8-1.1L15 9.7z"/></svg>
           <svg class="h" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg>
+          <svg class="p" viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg>
         </div>
       </div>
       <div class="who" id="who">—</div>
-      <p class="state" id="state">ยังไม่ได้เริ่ม</p>
-      <button class="btn" id="primary">เริ่มใช้งาน</button>
+      <p class="state" id="state"></p>
+      <button class="btn" id="primary"></button>
     </div>
 
-    <button class="warnbar hide" id="micWarn"><div><b>ไมค์ถูกระบบตัด คนอื่นไม่ได้ยินคุณ</b><span>เปิดหน้านี้ค้างไว้บนหน้าจอ หรือแตะที่นี่เพื่อเปิดไมค์ใหม่</span></div></button>
+    <div class="card callcard hide" id="callCard">
+      <div class="ic"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z"/></svg></div>
+      <div class="tx"><b id="callTx"></b><span data-t="callTitle"></span></div>
+      <button class="btn red sm" id="hangupBtn" data-t="callHangup"></button>
+    </div>
+
+    <button class="warnbar hide" id="micWarn"><div><b data-t="warnMicCut"></b><span data-t="warnMicCutSub"></span></div></button>
 
     <div class="grid2">
-      <button class="tog" id="micBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><div><b>ไมค์</b><span id="micTx">เปิด</span></div></button>
-      <button class="tog" id="earBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg></div><div><b>หูฟัง</b><span id="earTx">เปิด</span></div></button>
+      <button class="tog" id="micBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></div><div><b data-t="micLabel"></b><span id="micTx"></span></div></button>
+      <button class="tog" id="earBtn"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5v-2a7 7 0 0 1 14 0v2h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-7a9 9 0 0 0-9-9z"/></svg></div><div><b data-t="earLabel"></b><span id="earTx"></span></div></button>
     </div>
 
     <div class="card">
-      <h3>ระยะเสียงของฉัน</h3>
-      <div class="rv"><b id="rangeV">15</b><span>บล็อก</span></div>
+      <h3 data-t="rangeTitle"></h3>
+      <div class="rv"><b id="rangeV">15</b><span data-t="rangeUnit"></span></div>
       <input id="range" type="range" min="1" max="30" step="1" value="15">
-      <div class="presets" id="presets"><button data-v="5">5</button><button data-v="10">10</button><button data-v="15">15</button><button data-v="20">20</button><button data-v="30">30</button></div>
+      <div class="presets" id="presets"></div>
     </div>
 
     <div class="card">
-      <h3>ตั้งค่าเสียง</h3>
-      <div class="row"><label>ตัดเสียงรบกวน</label>
-        <div class="seg" id="nsSeg"><button data-v="0">ปิด</button><button data-v="1">กลาง</button><button data-v="2">แรง</button></div>
-        <small>ตัดเสียงพัดลม แอร์ เสียงซ่า (แรง = ตัดมากขึ้น แต่เสียงพูดอาจบางลงเล็กน้อย)</small></div>
-      <div class="row"><label>กันเสียงสะท้อน</label>
-        <div class="seg" id="echoSeg"><button data-v="auto">อัตโนมัติ</button><button data-v="on">เปิด</button><button data-v="off">ปิด</button></div>
-        <small>ใช้ลำโพงเปิดเสียง ให้เลือก "เปิด" ระบบจะลดไมค์ตอนมีคนอื่นกำลังพูด ถ้าใช้หูฟังเลือก "ปิด" หรือ "อัตโนมัติ" (แอปตรวจหูฟังให้เอง)</small></div>
+      <h3 data-t="gainTitle"></h3>
+      <div class="rv"><b id="gainV">100</b><span>%</span></div>
+      <input id="gain" type="range" min="25" max="400" step="5" value="100">
+      <span class="sub" data-t="gainHint"></span>
+      <div class="row" style="margin-top:14px"><label data-t="agcLabel"></label>
+        <div class="seg" id="agcSeg"><button data-v="1" data-t="on"></button><button data-v="0" data-t="off"></button></div>
+        <span class="sub" data-t="agcHint"></span></div>
     </div>
 
     <div class="card">
-      <h3>ได้ยินใครอยู่ตอนนี้</h3>
-      <ul id="heard"><li class="empty">ยังไม่มีใครอยู่ในระยะ</li></ul>
+      <h3 data-t="listenTitle"></h3>
+      <div class="rv"><b id="listenV">100</b><span>%</span></div>
+      <input id="listen" type="range" min="25" max="300" step="5" value="100">
+      <span class="sub" data-t="listenHint"></span>
+    </div>
+
+    <div class="card">
+      <h3 data-t="soundTitle"></h3>
+      <div class="row"><label data-t="nsLabel"></label>
+        <div class="seg" id="nsSeg"><button data-v="0" data-t="nsOff"></button><button data-v="1" data-t="nsMid"></button><button data-v="2" data-t="nsHigh"></button></div>
+        <span class="sub" data-t="nsHint"></span></div>
+      <div class="row"><label data-t="echoLabel"></label>
+        <div class="seg" id="echoSeg"><button data-v="auto" data-t="echoAuto"></button><button data-v="on" data-t="echoOn"></button><button data-v="off" data-t="echoOff"></button></div>
+        <span class="sub" data-t="echoHint"></span></div>
+    </div>
+
+    <div class="card">
+      <h3 data-t="heardTitle"></h3>
+      <ul id="heard"></ul>
     </div>
 
     <div class="card hide" id="sim">
@@ -214,13 +232,12 @@ ul{list-style:none;margin:0;padding:0}
       <input id="pz" type="range" min="-60" max="60" value="0">
     </div>
 
-    <div class="card hide" id="iosTip"><h3>สำหรับ iPhone / iPad</h3>
-      <p class="note" style="margin:0">iOS จะตัดไมค์ของเว็บเมื่อสลับไปแอปอื่น จึงต้องเปิดหน้านี้ค้างไว้ (iPad แบ่งจอได้) แตะปุ่มแชร์ แล้วเลือก "เพิ่มลงในหน้าจอโฮม" เพื่อเปิดแบบเต็มจอ</p></div>
+    <div class="card hide" id="iosTip"><h3 data-t="iosTitle"></h3><p class="note" style="margin:0" data-t="iosTip"></p></div>
     <p class="note" id="hint"></p>
     <div class="links">
-      <a href="#" id="stopLink" class="hide">หยุดใช้งาน</a>
-      <a href="#" id="battLink" class="hide">กันระบบปิดแอปเบื้องหลัง</a>
-      <a href="#" id="unlink">ยกเลิกการเชื่อม</a>
+      <a href="#" id="stopLink" class="hide" data-t="linkStop"></a>
+      <a href="#" id="battLink" class="hide" data-t="linkBatt"></a>
+      <a href="#" id="unlink" data-t="unlink"></a>
     </div>
   </section>
 </main>
@@ -230,27 +247,67 @@ ul{list-style:none;margin:0;padding:0}
 "use strict";
 const $ = (s) => document.querySelector(s);
 const NATIVE = typeof window.ZV !== "undefined"; // เปิดในแอป Android
+
+/* ---------- ข้อความและธีม (แอดมินแก้ได้ที่ config.json) ---------- */
+const DEFAULT_TEXTS = {"appName": "ZoHight Voice", "tagline": "คุยตามระยะในเกม ใกล้ดัง ไกลเบา", "chipUnlinked": "ยังไม่เชื่อม", "chipOffline": "ออฟไลน์", "chipConnecting": "กำลังเชื่อม", "chipWaitGame": "รอเข้าเกม", "chipDeaf": "ปิดหู", "chipMuted": "ปิดไมค์", "chipTalking": "กำลังพูด", "chipOnline": "ออนไลน์", "chipCall": "ในสาย", "linkTitle": "เชื่อมครั้งเดียว ใช้ได้ตลอด", "step1": "เข้าเกมในเซิร์ฟเวอร์ของเรา", "step2": "ดูรหัส 6 หลักที่ขึ้นกลางจอ", "step3": "ใส่รหัสด้านล่าง แล้วกดเชื่อมต่อ", "codePlaceholder": "······", "simPlaceholder": "โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง", "linkBtn": "เชื่อมต่อ", "linkBusy": "กำลังเชื่อมต่อ… (ครั้งแรกอาจรอได้ถึง 1 นาที)", "linkNote": "รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที", "errCode": "ใส่รหัส 6 หลักให้ครบ", "errServer": "ติดต่อเซิร์ฟเวอร์ไม่ได้", "stateIdle": "ยังไม่ได้เริ่ม", "stateConnecting": "กำลังเชื่อมต่อ…", "stateReconnecting": "กำลังเชื่อมต่อใหม่…", "stateWaitGame": "เชื่อมแล้ว รอคุณเข้าเกม", "stateDeaf": "ปิดหูอยู่ (ไมค์ปิดด้วย)", "stateMuted": "ปิดไมค์อยู่", "stateTalking": "กำลังพูด", "stateReady": "พร้อมพูด", "btnStart": "เริ่มใช้งาน", "btnTapSound": "แตะเพื่อเปิดเสียง", "micLabel": "ไมค์", "earLabel": "หูฟัง", "on": "เปิด", "off": "ปิด", "callTitle": "โทรศัพท์", "callIn": "สายเข้าจาก {name} (รับสายในเกม)", "callOut": "กำลังโทรหา {name}…", "callActive": "กำลังคุยกับ {name}", "callHangup": "วางสาย", "rangeTitle": "ระยะเสียงของฉัน", "rangeUnit": "บล็อก", "gainTitle": "ความดังไมค์ของฉัน", "gainHint": "คนอื่นบอกว่าเสียงเบา? เพิ่มตรงนี้ได้", "agcLabel": "ปรับความดังอัตโนมัติ", "agcHint": "ช่วยคนเสียงเบาให้ดังขึ้นเอง และลดลงเมื่อพูดดังเกิน", "listenTitle": "ความดังเสียงคนอื่น", "listenHint": "ปรับเสียงที่ได้ยินในแอปนี้", "soundTitle": "ตั้งค่าเสียง", "nsLabel": "ตัดเสียงรบกวน", "nsHint": "ตัดเสียงพัดลม แอร์ เสียงซ่า (แรง = ตัดมากขึ้น แต่เสียงพูดอาจบางลงเล็กน้อย)", "nsOff": "ปิด", "nsMid": "กลาง", "nsHigh": "แรง", "echoLabel": "กันเสียงสะท้อน", "echoHint": "ไม่ใช้หูฟังให้เลือก \"อัตโนมัติ\" หรือ \"เปิด\" ถ้าใช้หูฟังแล้วเสียงขาดช่วง ให้เลือก \"ปิด\"", "echoAuto": "อัตโนมัติ", "echoOn": "เปิด", "echoOff": "ปิด", "heardTitle": "ได้ยินใครอยู่ตอนนี้", "heardEmpty": "ยังไม่มีใครอยู่ในระยะ", "heardPhone": "ทางโทรศัพท์", "warnMicCut": "ไมค์ถูกระบบตัด คนอื่นไม่ได้ยินคุณ", "warnMicCutSub": "เปิดหน้านี้ค้างไว้บนหน้าจอ หรือแตะที่นี่เพื่อเปิดไมค์ใหม่", "hintNative": "สลับไปเล่นเกมได้เลย ไมค์ยังทำงานเบื้องหลัง (มีแจ้งเตือนค้างไว้)", "hintNoMic": "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้", "iosTitle": "สำหรับ iPhone / iPad", "iosTip": "iOS จะตัดไมค์ของเว็บเมื่อสลับไปแอปอื่น จึงต้องเปิดหน้านี้ค้างไว้ (iPad แบ่งจอได้) แตะปุ่มแชร์ แล้วเลือก \"เพิ่มลงในหน้าจอโฮม\" เพื่อเปิดแบบเต็มจอ", "linkStop": "หยุดใช้งาน", "linkBatt": "กันระบบปิดแอปเบื้องหลัง", "unlink": "ยกเลิกการเชื่อม", "unlinkConfirm": "แตะอีกครั้งเพื่อยืนยันยกเลิกการเชื่อม", "toastReplaced": "มีอุปกรณ์อื่นเชื่อมแทนแล้ว", "toastTokenBad": "รหัสเชื่อมหมดอายุ กรุณาเชื่อมใหม่"};
+const DEFAULT_THEME = {"bg": "#080519", "bg2": "#150c3d", "glow1": "rgba(139,92,246,.34)", "glow2": "rgba(56,189,248,.24)", "card": "rgba(255,255,255,.07)", "line": "rgba(255,255,255,.15)", "ink": "#ffffff", "mute": "#bdb8e3", "a": "#8b5cf6", "b": "#38bdf8", "ok": "#7dd3fc", "warn": "#fbbf24", "bad": "#fb7185"};
+const TX = { ...DEFAULT_TEXTS };
+function T(k, v) {
+  let s = TX[k] !== undefined ? TX[k] : DEFAULT_TEXTS[k] !== undefined ? DEFAULT_TEXTS[k] : k;
+  if (v) for (const [a, b] of Object.entries(v)) s = s.split("{" + a + "}").join(b);
+  return s;
+}
+function applyTexts() {
+  document.querySelectorAll("[data-t]").forEach((e) => { e.textContent = T(e.dataset.t); });
+  document.querySelectorAll("[data-ph]").forEach((e) => { e.placeholder = T(e.dataset.ph); });
+  document.title = T("appName");
+}
+function applyConfig(j) {
+  if (!j || typeof j !== "object") return;
+  if (j.texts) Object.assign(TX, j.texts);
+  for (const [k, v] of Object.entries({ ...DEFAULT_THEME, ...(j.theme || {}) })) document.documentElement.style.setProperty("--" + k, v);
+  applyTexts(); render();
+}
+async function loadConfig() {
+  try { const c = localStorage.getItem("vc_cfg"); if (c) applyConfig(JSON.parse(c)); } catch {}
+  try {
+    const base = NATIVE ? String(ZV.serverUrl()).replace(/\/$/, "") : "";
+    const r = await fetch(base + "/config.json?_=" + Date.now(), { cache: "no-store" });
+    if (r.ok) { const j = await r.json(); try { localStorage.setItem("vc_cfg", JSON.stringify(j)); } catch {} applyConfig(j); }
+  } catch {}
+}
+
+/* ---------- สถานะ ---------- */
 const S = { linked: false, name: "", running: false, conn: "idle", online: false, mic: true, deaf: false,
-  range: 15, max: 30, ns: 1, echo: "auto", speaking: false, level: 0, hear: [], micWarn: false, needTap: false };
+  range: 15, max: 30, ns: 1, echo: "auto", gain: 1, agc: true, listen: 1, call: null,
+  speaking: false, level: 0, hear: [], micWarn: false, needTap: false };
 let simMode = false, lastSet = 0;
 
-/* ---------- แสดงผล ---------- */
 function toast(t) { const e = $("#toast"); e.textContent = t; e.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove("show"), 3800); }
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function hue(s) { let h = 0; for (const c of s) h = (h * 31 + c.codePointAt(0)) % 360; return h; }
+let presetsFor = 0;
+function buildPresets() {
+  const vals = [...new Set([1 / 6, 1 / 3, 1 / 2, 2 / 3, 1].map((f) => Math.max(1, Math.round(S.max * f))))];
+  $("#presets").innerHTML = vals.map((v) => `<button data-v="${v}">${v}</button>`).join("");
+}
+const pct = (x) => Math.round(x * 100);
+function paintRange(el, v, min, max) { el.style.setProperty("--p", ((v - min) / Math.max(1, max - min)) * 100 + "%"); }
 
 function render() {
   $("#link").classList.toggle("hide", S.linked);
   $("#main").classList.toggle("hide", !S.linked);
-  if (!S.linked) { $("#chip").className = "chip"; $("#chipTx").textContent = "ยังไม่เชื่อม"; return; }
-  let orb = "off", txt = "ยังไม่ได้เริ่ม", chip = "", chipTx = "ออฟไลน์";
+  if (!S.linked) { $("#chip").className = "chip"; $("#chipTx").textContent = T("chipUnlinked"); return; }
+  const inCall = S.call && S.call.st === "active";
+  let orb = "off", txt = T("stateIdle"), chip = "", chipTx = T("chipOffline");
   if (S.running) {
-    if (S.conn !== "connected") { orb = "idle"; txt = S.conn === "reconnecting" ? "กำลังเชื่อมต่อใหม่…" : "กำลังเชื่อมต่อ…"; chip = "wait"; chipTx = "กำลังเชื่อม"; }
-    else if (!S.online) { orb = "idle"; txt = "เชื่อมแล้ว รอคุณเข้าเกม"; chip = "wait"; chipTx = "รอเข้าเกม"; }
-    else if (S.deaf) { orb = "deaf"; txt = "ปิดหูอยู่ (ไมค์ปิดด้วย)"; chip = "warn"; chipTx = "ปิดหู"; }
-    else if (!S.mic) { orb = "muted"; txt = "ปิดไมค์อยู่"; chip = "warn"; chipTx = "ปิดไมค์"; }
-    else if (S.speaking) { orb = "talk"; txt = "กำลังพูด"; chip = "ok"; chipTx = "กำลังพูด"; }
-    else { orb = "idle"; txt = "พร้อมพูด"; chip = "ok"; chipTx = "ออนไลน์"; }
+    if (S.conn !== "connected") { orb = "idle"; txt = T(S.conn === "reconnecting" ? "stateReconnecting" : "stateConnecting"); chip = "wait"; chipTx = T("chipConnecting"); }
+    else if (!S.online) { orb = "idle"; txt = T("stateWaitGame"); chip = "wait"; chipTx = T("chipWaitGame"); }
+    else if (S.deaf) { orb = "deaf"; txt = T("stateDeaf"); chip = "warn"; chipTx = T("chipDeaf"); }
+    else if (!S.mic) { orb = "muted"; txt = T("stateMuted"); chip = "warn"; chipTx = T("chipMuted"); }
+    else if (S.speaking) { orb = "talk"; txt = T("stateTalking"); chip = "ok"; chipTx = T("chipTalking"); }
+    else if (inCall) { orb = "call"; txt = T("callActive", { name: S.call.with }); chip = "ok"; chipTx = T("chipCall"); }
+    else { orb = "idle"; txt = T("stateReady"); chip = "ok"; chipTx = T("chipOnline"); }
   }
   $("#orb").className = "orb " + orb;
   $("#orb").style.setProperty("--lvl", S.running && S.mic && !S.deaf ? Math.min(1, S.level) : 0);
@@ -260,38 +317,43 @@ function render() {
 
   const showPrimary = !S.running || S.needTap;
   $("#primary").classList.toggle("hide", !showPrimary);
-  $("#primary").textContent = S.running ? "แตะเพื่อเปิดเสียง" : "เริ่มใช้งาน";
+  $("#primary").textContent = T(S.running ? "btnTapSound" : "btnStart");
   $("#stopLink").classList.toggle("hide", !(NATIVE && S.running));
   $("#battLink").classList.toggle("hide", !NATIVE);
   $("#micWarn").classList.toggle("hide", !(S.micWarn && S.running));
+  $("#callCard").classList.toggle("hide", !(S.call && S.running));
+  if (S.call) $("#callTx").textContent = T(S.call.st === "active" ? "callActive" : S.call.st === "out" ? "callOut" : "callIn", { name: S.call.with });
 
   const micOn = S.mic && !S.deaf;
-  $("#micBtn").classList.toggle("off", !micOn); $("#micTx").textContent = micOn ? "เปิด" : "ปิด";
-  $("#earBtn").classList.toggle("off", S.deaf); $("#earTx").textContent = S.deaf ? "ปิด" : "เปิด";
+  $("#micBtn").classList.toggle("off", !micOn); $("#micTx").textContent = T(micOn ? "on" : "off");
+  $("#earBtn").classList.toggle("off", S.deaf); $("#earTx").textContent = T(S.deaf ? "off" : "on");
+
   if (presetsFor !== S.max) { presetsFor = S.max; buildPresets(); $("#range").max = S.max; }
   if (document.activeElement !== $("#range")) $("#range").value = S.range;
-  $("#range").style.setProperty("--p", ((S.range - 1) / Math.max(1, S.max - 1)) * 100 + "%");
+  paintRange($("#range"), S.range, 1, S.max);
   $("#rangeV").textContent = S.range;
   document.querySelectorAll("#presets button").forEach((b) => b.classList.toggle("on", +b.dataset.v === S.range));
+  if (document.activeElement !== $("#gain")) $("#gain").value = pct(S.gain);
+  paintRange($("#gain"), pct(S.gain), 25, 400); $("#gainV").textContent = pct(S.gain);
+  if (document.activeElement !== $("#listen")) $("#listen").value = pct(S.listen);
+  paintRange($("#listen"), pct(S.listen), 25, 300); $("#listenV").textContent = pct(S.listen);
+  document.querySelectorAll("#agcSeg button").forEach((b) => b.classList.toggle("on", (b.dataset.v === "1") === !!S.agc));
   document.querySelectorAll("#nsSeg button").forEach((b) => b.classList.toggle("on", +b.dataset.v === S.ns));
   document.querySelectorAll("#echoSeg button").forEach((b) => b.classList.toggle("on", b.dataset.v === S.echo));
   $("#heard").innerHTML = S.hear.length
-    ? S.hear.map((p) => `<li class="p"><div class="av" style="background:hsl(${hue(p.n)} 75% 62%)">${esc([...p.n][0] || "?")}</div><div class="nm">${esc(p.n)}</div><div class="bar"><i style="width:${Math.round(p.v * 100)}%"></i></div></li>`).join("")
-    : '<li class="empty">ยังไม่มีใครอยู่ในระยะ</li>';
-  $("#hint").textContent = S.hintText || (NATIVE ? "สลับไปเล่นเกมได้เลย ไมค์ยังทำงานเบื้องหลัง (มีแจ้งเตือนค้างไว้)" : "");
-}
-let presetsFor = 0;
-function buildPresets() {
-  const vals = [...new Set([1 / 6, 1 / 3, 1 / 2, 2 / 3, 1].map((f) => Math.max(1, Math.round(S.max * f))))];
-  $("#presets").innerHTML = vals.map((v) => `<button data-v="${v}">${v}</button>`).join("");
+    ? S.hear.map((p) => `<li class="p"><div class="av" style="background:hsl(${hue(p.n)} 62% 52%)">${esc([...p.n][0] || "?")}</div><div class="nm">${esc(p.n)}${p.ph ? "<em>" + esc(T("heardPhone")) + "</em>" : ""}</div><div class="bar"><i style="width:${Math.round(p.v * 100)}%"></i></div></li>`).join("")
+    : `<li class="empty">${esc(T("heardEmpty"))}</li>`;
+  $("#hint").textContent = S.hintText || (NATIVE ? T("hintNative") : "");
 }
 function setLevel(v) { S.level = v; $("#orb").style.setProperty("--lvl", S.running && S.mic && !S.deaf ? Math.min(1, v) : 0); }
 
 /* ---------- ปุ่มต่างๆ ---------- */
 function sendSet(o) {
   lastSet = performance.now();
-  if (NATIVE) { if ("mic" in o) ZV.setMic(o.mic); if ("deaf" in o) ZV.setDeaf(o.deaf); if ("range" in o) ZV.setRange(o.range); }
-  else web.sendSet(o);
+  if (NATIVE) {
+    if ("mic" in o) ZV.setMic(o.mic); if ("deaf" in o) ZV.setDeaf(o.deaf); if ("range" in o) ZV.setRange(o.range);
+    if ("gain" in o) ZV.setGain(Math.round(o.gain * 100)); if ("agc" in o) ZV.setAgc(o.agc);
+  } else web.sendSet(o);
 }
 $("#micBtn").onclick = () => {
   lastSet = performance.now();
@@ -300,24 +362,28 @@ $("#micBtn").onclick = () => {
   render();
 };
 $("#earBtn").onclick = () => { lastSet = performance.now(); S.deaf = !S.deaf; sendSet({ deaf: S.deaf }); render(); };
-$("#nsSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (v === undefined) return; S.ns = +v; render(); if (NATIVE) ZV.setNs(S.ns); else web.setNs(S.ns); };
-$("#echoSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (!v) return; S.echo = v; render(); if (NATIVE) ZV.setEcho(v); else web.setEcho(v); };
-let rt = 0;
+let rt = 0, gt = 0;
 function setRange(v) { lastSet = performance.now(); S.range = v; render(); clearTimeout(rt); rt = setTimeout(() => sendSet({ range: v }), 150); }
 $("#range").oninput = (e) => setRange(+e.target.value);
 $("#presets").onclick = (e) => { const v = e.target.dataset && +e.target.dataset.v; if (v) setRange(v); };
+$("#gain").oninput = (e) => { lastSet = performance.now(); S.gain = +e.target.value / 100; render(); clearTimeout(gt); gt = setTimeout(() => sendSet({ gain: S.gain }), 150); };
+$("#agcSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (v === undefined) return; lastSet = performance.now(); S.agc = v === "1"; render(); sendSet({ agc: S.agc }); };
+$("#listen").oninput = (e) => { S.listen = +e.target.value / 100; render(); if (NATIVE) ZV.setListen(+e.target.value); else web.setListen(S.listen); };
+$("#nsSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (v === undefined) return; S.ns = +v; render(); if (NATIVE) ZV.setNs(S.ns); else web.setNs(S.ns); };
+$("#echoSeg").onclick = (e) => { const v = e.target.dataset && e.target.dataset.v; if (!v) return; S.echo = v; render(); if (NATIVE) ZV.setEcho(v); else web.setEcho(v); };
+$("#hangupBtn").onclick = () => { if (NATIVE) ZV.hangup(); else web.hangup(); };
 $("#primary").onclick = () => { if (NATIVE) ZV.start(); else web.startOrResume(); };
 $("#stopLink").onclick = (e) => { e.preventDefault(); if (NATIVE) ZV.stop(); };
 $("#battLink").onclick = (e) => { e.preventDefault(); if (NATIVE) ZV.batterySettings(); };
 let unlinkArm = 0;
 $("#unlink").onclick = (e) => {
   e.preventDefault();
-  if (!unlinkArm) { // แตะครั้งแรก: ขอให้ยืนยัน (ไม่ใช้ confirm() เพราะบางแอป/WebView ไม่รองรับ)
-    $("#unlink").textContent = "แตะอีกครั้งเพื่อยืนยันยกเลิกการเชื่อม";
-    unlinkArm = setTimeout(() => { unlinkArm = 0; $("#unlink").textContent = "ยกเลิกการเชื่อม"; }, 4000);
+  if (!unlinkArm) {
+    $("#unlink").textContent = T("unlinkConfirm");
+    unlinkArm = setTimeout(() => { unlinkArm = 0; $("#unlink").textContent = T("unlink"); }, 4000);
     return;
   }
-  clearTimeout(unlinkArm); unlinkArm = 0; $("#unlink").textContent = "ยกเลิกการเชื่อม";
+  clearTimeout(unlinkArm); unlinkArm = 0; $("#unlink").textContent = T("unlink");
   if (NATIVE) ZV.unlink(); else web.unlink();
 };
 $("#micWarn").onclick = () => { if (!NATIVE) web.recoverMic(true); };
@@ -326,17 +392,17 @@ $("#micWarn").onclick = () => { if (!NATIVE) web.recoverMic(true); };
 $("#linkBtn").onclick = async () => {
   $("#linkErr").textContent = "";
   const code = $("#code").value.replace(/\D/g, "");
-  if (!simMode && code.length !== 6) { $("#linkErr").textContent = "ใส่รหัส 6 หลักให้ครบ"; return; }
-  $("#linkBtn").disabled = true; $("#linkBtn").textContent = "กำลังเชื่อมต่อ… (ครั้งแรกอาจรอได้ถึง 1 นาที)";
+  if (!simMode && code.length !== 6) { $("#linkErr").textContent = T("errCode"); return; }
+  $("#linkBtn").disabled = true; $("#linkBtn").textContent = T("linkBusy");
   if (NATIVE) { ZV.link(code); return; }
   try {
     const body = simMode ? { sim: $("#simName").value } : { code };
     const r = await fetch("/api/link", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
-    if (!j.ok) throw new Error(j.error || "เชื่อมไม่สำเร็จ");
+    if (!j.ok) throw new Error(j.error || T("errServer"));
     web.saveLink(j.token, j.name);
-  } catch (e) { $("#linkErr").textContent = e.message || "ติดต่อเซิร์ฟเวอร์ไม่ได้"; }
-  $("#linkBtn").disabled = false; $("#linkBtn").textContent = "เชื่อมต่อ";
+  } catch (e) { $("#linkErr").textContent = e.message || T("errServer"); }
+  $("#linkBtn").disabled = false; $("#linkBtn").textContent = T("linkBtn");
 };
 
 /* ================== โหมดแอป Android ================== */
@@ -345,10 +411,10 @@ window.onNative = (st) => {
   const { error, ...rest } = st;
   Object.assign(S, rest);
   if (error) { toast(error); $("#linkErr").textContent = error; }
-  $("#linkBtn").disabled = false; $("#linkBtn").textContent = "เชื่อมต่อ";
+  $("#linkBtn").disabled = false; $("#linkBtn").textContent = T("linkBtn");
   if (!S.linked) autoStarted = false;
   render();
-  if (S.linked && !S.running && !autoStarted) { autoStarted = true; ZV.start(); } // เปิดแอป/เชื่อมเสร็จ แล้วเริ่มให้เอง
+  if (S.linked && !S.running && !autoStarted) { autoStarted = true; ZV.start(); }
 };
 
 /* ตัวตัดเสียงรบกวน (ทดสอบแล้วว่าให้ผลเหมือนฝั่งแอป) */
@@ -451,6 +517,36 @@ class Denoiser {
 }
 
 
+/* ปรับความดังไมค์ (AGC + ตัวคูณ + ลิมิตเตอร์) */
+// ปรับความดังไมค์: AGC + ตัวคูณที่ผู้เล่นตั้ง + ลิมิตเตอร์ (พอร์ตจาก MicProcessor.java)
+class MicProcessor {
+  constructor() { this.level = 0; this.agcGain = 1; this.prevTotal = 1; this.manual = 1; }
+  setManual(g) { this.manual = Math.max(0.25, Math.min(4, g)); }
+  process(x, agcOn) { // x: Int16Array (แก้ในที่เดิม)
+    const n = x.length; let sq = 0;
+    for (let i = 0; i < n; i++) { const f = x[i] / 32768; sq += f * f; }
+    const rms = Math.sqrt(sq / Math.max(1, n));
+    if (agcOn) {
+      if (rms > 0.004) {
+        this.level = this.level === 0 ? rms : 0.9 * this.level + 0.1 * rms;
+        const desired = Math.max(0.5, Math.min(12, 0.10 / this.level));
+        if (desired < this.agcGain) this.agcGain += (desired - this.agcGain) * 0.3; else this.agcGain += (desired - this.agcGain) * 0.03;
+      }
+    } else this.agcGain += (1 - this.agcGain) * 0.1;
+    const total = this.agcGain * this.manual;
+    for (let i = 0; i < n; i++) {
+      const g = this.prevTotal + (total - this.prevTotal) * (i + 1) / n;
+      let y = x[i] / 32768 * g; const a = Math.abs(y);
+      if (a > 0.8) y = (y < 0 ? -1 : 1) * (0.8 + 0.2 * Math.tanh((a - 0.8) / 0.2));
+      x[i] = Math.round(y < 0 ? y * 32768 : y * 32767);
+    }
+    this.prevTotal = total;
+    return x;
+  }
+}
+
+
+
 /* ================== โหมดเว็บเบราว์เซอร์ ================== */
 const web = (() => {
   let token = localStorage.getItem("vc_token");
@@ -461,6 +557,8 @@ const web = (() => {
   if (token) { S.linked = true; S.name = localStorage.getItem("vc_name") || ""; }
   { const n = localStorage.getItem("vc_ns"), e = localStorage.getItem("vc_echo"); if (n !== null) S.ns = +n; if (e) S.echo = e; }
   let dn = null, farLevel = 0;
+  const mp = new MicProcessor();
+  { const l = localStorage.getItem("vc_listen"); if (l) S.listen = +l; }
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const standalone = window.navigator.standalone === true || (window.matchMedia && matchMedia("(display-mode: standalone)").matches);
   if (isIOS && !standalone) $("#iosTip").classList.remove("hide");
@@ -502,7 +600,7 @@ const web = (() => {
     ctx.onstatechange = () => { S.needTap = ctx && ctx.state !== "running"; maybeReady(); render(); };
     ctx.resume().catch(() => {});
     try { await attachMic(); }
-    catch { micOK = false; S.hintText = "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้"; }
+    catch { micOK = false; S.hintText = T("hintNoMic"); }
     S.needTap = ctx.state !== "running";
     getWake(); render(); connect();
   }
@@ -557,6 +655,7 @@ const web = (() => {
     const active = now < hang && S.mic && !S.deaf;
     setLevel(Math.min(1, rms * 8));
     if (active !== S.speaking) { S.speaking = active; render(); }
+    if (active) { mp.setManual(S.gain); mp.process(pcm, !!S.agc); }
     if (active && ws && ws.readyState === 1 && readySent) ws.send(pcm.buffer);
   }
 
@@ -568,8 +667,8 @@ const web = (() => {
     ws.onmessage = (e) => (typeof e.data === "string" ? onText(JSON.parse(e.data)) : onVoice(e.data));
     ws.onclose = (e) => {
       helloOK = false; readySent = false; S.online = false;
-      if (e.code === 4002) { unlink(); toast("รหัสเชื่อมหมดอายุ กรุณาเชื่อมใหม่"); return; }
-      if (e.code === 4001) { S.conn = "idle"; S.running = false; started = false; render(); toast("มีอุปกรณ์อื่นเชื่อมแทนแล้ว"); return; }
+      if (e.code === 4002) { unlink(); toast(T("toastTokenBad")); return; }
+      if (e.code === 4001) { S.conn = "idle"; S.running = false; started = false; render(); toast(T("toastReplaced")); return; }
       S.conn = "reconnecting"; render();
       setTimeout(() => token && started && connect(), 2000);
     };
@@ -586,8 +685,9 @@ const web = (() => {
       const me = m.me || {};
       if (m.max) S.max = m.max;
       S.online = !!me.online;
-      if (me.online && performance.now() - lastSet > 1500) { S.mic = me.mic; S.deaf = me.deaf; S.range = me.range; }
-      S.hear = Object.keys(m.v).map((id) => ({ n: m.names[id] || "?", v: m.v[id][0] }));
+      S.call = me.call || null;
+      if (me.online && performance.now() - lastSet > 1500) { S.mic = me.mic; S.deaf = me.deaf; S.range = me.range; if (me.gain) S.gain = me.gain; if (typeof me.agc === "boolean") S.agc = me.agc; }
+      S.hear = Object.keys(m.v).map((id) => ({ n: m.names[id] || "?", v: m.v[id][0], ph: m.v[id][2] === 1 }));
       applyMix(m); render();
     }
   }
@@ -601,7 +701,7 @@ const web = (() => {
   function applyMix(m) {
     if (!ctx) return;
     const t = ctx.currentTime;
-    master.gain.setTargetAtTime(S.deaf ? 0 : 1, t, 0.03);
+    master.gain.setTargetAtTime(S.deaf ? 0 : S.listen, t, 0.03);
     for (const [id, v] of voices) { const x = m.v[id]; v.g.gain.setTargetAtTime(x ? x[0] : 0, t, 0.06); if (v.p && x) v.p.pan.setTargetAtTime(x[1], t, 0.06); }
     for (const id of Object.keys(m.v)) voiceFor(+id).g.gain.setTargetAtTime(m.v[id][0], t, 0.06);
   }
@@ -621,6 +721,8 @@ const web = (() => {
   function sendSet(o) { if (ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "set", ...o })); }
   function setNs(v) { localStorage.setItem("vc_ns", v); if (track && track.applyConstraints) track.applyConstraints({ noiseSuppression: v > 0 }).catch(() => {}); }
   function setEcho(v) { localStorage.setItem("vc_echo", v); }
+  function setListen(v) { localStorage.setItem("vc_listen", v); if (ctx && master) master.gain.setTargetAtTime(S.deaf ? 0 : v, ctx.currentTime, 0.03); }
+  function hangup() { if (ws && ws.readyState === 1) ws.send(JSON.stringify({ t: "callact", act: "hangup" })); }
 
   document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (ctx && ctx.state !== "running") ctx.resume(); getWake(); setTimeout(() => { if (track && (track.muted || track.readyState === "ended")) recoverMic(); }, 300); } });
   document.addEventListener("pointerdown", () => { if (ctx && ctx.state !== "running") ctx.resume(); }, { passive: true });
@@ -641,12 +743,13 @@ const web = (() => {
       if (granted) start();
     }
   }
-  return { saveLink, unlink, startOrResume, recoverMic, sendSet, setNs, setEcho, boot, get track() { return track; } };
+  return { saveLink, unlink, startOrResume, recoverMic, sendSet, setNs, setEcho, setListen, hangup, boot, get track() { return track; } };
 })();
 
 /* ---------- เริ่มต้น ---------- */
+applyTexts();
+loadConfig();
 if (NATIVE) {
-  $("#linkNote").textContent = "รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที ติดต่อเซิร์ฟเวอร์ครั้งแรกอาจช้าถึง 1 นาที";
   try { window.onNative(JSON.parse(ZV.getState())); } catch {}
 } else {
   web.boot();
