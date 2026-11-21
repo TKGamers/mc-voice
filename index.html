@@ -125,6 +125,8 @@ ul{list-style:none;margin:0;padding:0}
 .bar{width:84px;height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--b))}
 .empty{color:var(--mute);font-size:14px;padding:4px 0}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0;border-top:1px solid var(--line)}
+.kv:first-of-type{border-top:0}.kv span{color:var(--mute)}.kv b{font-weight:600}
 .warnbar{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
   background:rgba(251,113,133,.14);border:1px solid rgba(251,113,133,.55);border-radius:16px;padding:13px 14px;margin:0 0 12px}
 .warnbar b{display:block;font-size:15px} .warnbar span{font-size:13px;color:#fecdd3}
@@ -232,6 +234,14 @@ ul{list-style:none;margin:0;padding:0}
       <input id="pz" type="range" min="-60" max="60" value="0">
     </div>
 
+    <div class="card" id="diagCard"><h3 data-t="diagTitle"></h3>
+      <div class="kv"><span data-t="diagMode"></span><b id="dMode">-</b></div>
+      <div class="kv"><span data-t="diagSend"></span><b id="dSend">-</b></div>
+      <div class="kv"><span data-t="diagRecv"></span><b id="dRecv">-</b></div>
+      <div class="kv"><span data-t="diagMic"></span><b id="dMic">-</b></div>
+      <div class="kv"><span data-t="diagDuck"></span><b id="dDuck">-</b></div>
+    </div>
+
     <div class="card hide" id="iosTip"><h3 data-t="iosTitle"></h3><p class="note" style="margin:0" data-t="iosTip"></p></div>
     <p class="note" id="hint"></p>
     <div class="links">
@@ -249,7 +259,7 @@ const $ = (s) => document.querySelector(s);
 const NATIVE = typeof window.ZV !== "undefined"; // เปิดในแอป Android
 
 /* ---------- ข้อความและธีม (แอดมินแก้ได้ที่ config.json) ---------- */
-const DEFAULT_TEXTS = {"appName": "ZoHight Voice", "tagline": "คุยตามระยะในเกม ใกล้ดัง ไกลเบา", "chipUnlinked": "ยังไม่เชื่อม", "chipOffline": "ออฟไลน์", "chipConnecting": "กำลังเชื่อม", "chipWaitGame": "รอเข้าเกม", "chipDeaf": "ปิดหู", "chipMuted": "ปิดไมค์", "chipTalking": "กำลังพูด", "chipOnline": "ออนไลน์", "chipCall": "ในสาย", "linkTitle": "เชื่อมครั้งเดียว ใช้ได้ตลอด", "step1": "เข้าเกมในเซิร์ฟเวอร์ของเรา", "step2": "ดูรหัส 6 หลักที่ขึ้นกลางจอ", "step3": "ใส่รหัสด้านล่าง แล้วกดเชื่อมต่อ", "codePlaceholder": "······", "simPlaceholder": "โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง", "linkBtn": "เชื่อมต่อ", "linkBusy": "กำลังเชื่อมต่อ… (ครั้งแรกอาจรอได้ถึง 1 นาที)", "linkNote": "รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที", "errCode": "ใส่รหัส 6 หลักให้ครบ", "errServer": "ติดต่อเซิร์ฟเวอร์ไม่ได้", "stateIdle": "ยังไม่ได้เริ่ม", "stateConnecting": "กำลังเชื่อมต่อ…", "stateReconnecting": "กำลังเชื่อมต่อใหม่…", "stateWaitGame": "เชื่อมแล้ว รอคุณเข้าเกม", "stateDeaf": "ปิดหูอยู่ (ไมค์ปิดด้วย)", "stateMuted": "ปิดไมค์อยู่", "stateTalking": "กำลังพูด", "stateReady": "พร้อมพูด", "btnStart": "เริ่มใช้งาน", "btnTapSound": "แตะเพื่อเปิดเสียง", "micLabel": "ไมค์", "earLabel": "หูฟัง", "on": "เปิด", "off": "ปิด", "callTitle": "โทรศัพท์", "callIn": "สายเข้าจาก {name} (รับสายในเกม)", "callOut": "กำลังโทรหา {name}…", "callActive": "กำลังคุยกับ {name}", "callHangup": "วางสาย", "rangeTitle": "ระยะเสียงของฉัน", "rangeUnit": "บล็อก", "gainTitle": "ความดังไมค์ของฉัน", "gainHint": "คนอื่นบอกว่าเสียงเบา? เพิ่มตรงนี้ได้", "agcLabel": "ปรับความดังอัตโนมัติ", "agcHint": "ช่วยคนเสียงเบาให้ดังขึ้นเอง และลดลงเมื่อพูดดังเกิน", "listenTitle": "ความดังเสียงคนอื่น", "listenHint": "ปรับเสียงที่ได้ยินในแอปนี้", "soundTitle": "ตั้งค่าเสียง", "nsLabel": "ตัดเสียงรบกวน", "nsHint": "ตัดเสียงพัดลม แอร์ เสียงซ่า (แรง = ตัดมากขึ้น แต่เสียงพูดอาจบางลงเล็กน้อย)", "nsOff": "ปิด", "nsMid": "กลาง", "nsHigh": "แรง", "echoLabel": "กันเสียงสะท้อน", "echoHint": "ไม่ใช้หูฟังให้เลือก \"อัตโนมัติ\" หรือ \"เปิด\" ถ้าใช้หูฟังแล้วเสียงขาดช่วง ให้เลือก \"ปิด\"", "echoAuto": "อัตโนมัติ", "echoOn": "เปิด", "echoOff": "ปิด", "heardTitle": "ได้ยินใครอยู่ตอนนี้", "heardEmpty": "ยังไม่มีใครอยู่ในระยะ", "heardPhone": "ทางโทรศัพท์", "warnMicCut": "ไมค์ถูกระบบตัด คนอื่นไม่ได้ยินคุณ", "warnMicCutSub": "เปิดหน้านี้ค้างไว้บนหน้าจอ หรือแตะที่นี่เพื่อเปิดไมค์ใหม่", "hintNative": "สลับไปเล่นเกมได้เลย ไมค์ยังทำงานเบื้องหลัง (มีแจ้งเตือนค้างไว้)", "hintNoMic": "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้", "iosTitle": "สำหรับ iPhone / iPad", "iosTip": "iOS จะตัดไมค์ของเว็บเมื่อสลับไปแอปอื่น จึงต้องเปิดหน้านี้ค้างไว้ (iPad แบ่งจอได้) แตะปุ่มแชร์ แล้วเลือก \"เพิ่มลงในหน้าจอโฮม\" เพื่อเปิดแบบเต็มจอ", "linkStop": "หยุดใช้งาน", "linkBatt": "กันระบบปิดแอปเบื้องหลัง", "unlink": "ยกเลิกการเชื่อม", "unlinkConfirm": "แตะอีกครั้งเพื่อยืนยันยกเลิกการเชื่อม", "toastReplaced": "มีอุปกรณ์อื่นเชื่อมแทนแล้ว", "toastTokenBad": "รหัสเชื่อมหมดอายุ กรุณาเชื่อมใหม่"};
+const DEFAULT_TEXTS = {"appName": "ZoHight Voice", "tagline": "คุยตามระยะในเกม ใกล้ดัง ไกลเบา", "chipUnlinked": "ยังไม่เชื่อม", "chipOffline": "ออฟไลน์", "chipConnecting": "กำลังเชื่อม", "chipWaitGame": "รอเข้าเกม", "chipDeaf": "ปิดหู", "chipMuted": "ปิดไมค์", "chipTalking": "กำลังพูด", "chipOnline": "ออนไลน์", "chipCall": "ในสาย", "linkTitle": "เชื่อมครั้งเดียว ใช้ได้ตลอด", "step1": "เข้าเกมในเซิร์ฟเวอร์ของเรา", "step2": "ดูรหัส 6 หลักที่ขึ้นกลางจอ", "step3": "ใส่รหัสด้านล่าง แล้วกดเชื่อมต่อ", "codePlaceholder": "······", "simPlaceholder": "โหมดทดสอบ: ตั้งชื่อผู้เล่นจำลอง", "linkBtn": "เชื่อมต่อ", "linkBusy": "กำลังเชื่อมต่อ… (ครั้งแรกอาจรอได้ถึง 1 นาที)", "linkNote": "รหัสใช้ได้เฉพาะตอนคุณอยู่ในเกม และหมดอายุใน 30 นาที", "errCode": "ใส่รหัส 6 หลักให้ครบ", "errServer": "ติดต่อเซิร์ฟเวอร์ไม่ได้", "stateIdle": "ยังไม่ได้เริ่ม", "stateConnecting": "กำลังเชื่อมต่อ…", "stateReconnecting": "กำลังเชื่อมต่อใหม่…", "stateWaitGame": "เชื่อมแล้ว รอคุณเข้าเกม", "stateDeaf": "ปิดหูอยู่ (ไมค์ปิดด้วย)", "stateMuted": "ปิดไมค์อยู่", "stateTalking": "กำลังพูด", "stateReady": "พร้อมพูด", "btnStart": "เริ่มใช้งาน", "btnTapSound": "แตะเพื่อเปิดเสียง", "micLabel": "ไมค์", "earLabel": "หูฟัง", "on": "เปิด", "off": "ปิด", "callTitle": "โทรศัพท์", "callIn": "สายเข้าจาก {name} (รับสายในเกม)", "callOut": "กำลังโทรหา {name}…", "callActive": "กำลังคุยกับ {name}", "callHangup": "วางสาย", "rangeTitle": "ระยะเสียงของฉัน", "rangeUnit": "บล็อก", "gainTitle": "ความดังไมค์ของฉัน", "gainHint": "คนอื่นบอกว่าเสียงเบา? เพิ่มตรงนี้ได้", "agcLabel": "ปรับความดังอัตโนมัติ", "agcHint": "ช่วยคนเสียงเบาให้ดังขึ้นเอง และลดลงเมื่อพูดดังเกิน", "listenTitle": "ความดังเสียงคนอื่น", "listenHint": "ปรับเสียงที่ได้ยินในแอปนี้", "soundTitle": "ตั้งค่าเสียง", "nsLabel": "ตัดเสียงรบกวน", "nsHint": "ตัดเสียงพัดลม แอร์ เสียงซ่า (แรง = ตัดมากขึ้น แต่เสียงพูดอาจบางลงเล็กน้อย)", "nsOff": "ปิด", "nsMid": "กลาง", "nsHigh": "แรง", "echoLabel": "กันเสียงสะท้อน", "echoHint": "ใช้ลำโพงแล้วยังมีเสียงสะท้อน ให้ลองเลือก \"โหมดโทรศัพท์\" (เหมือนแอปโทรทั่วไป) ถ้าเสียงคนอื่นเบาลง ให้เพิ่มแถบ \"ความดังเสียงคนอื่น\" ใช้หูฟังเลือก \"อัตโนมัติ\"", "echoAuto": "อัตโนมัติ", "echoOn": "โหมดโทรศัพท์", "echoOff": "ปิด", "heardTitle": "ได้ยินใครอยู่ตอนนี้", "heardEmpty": "ยังไม่มีใครอยู่ในระยะ", "heardPhone": "ทางโทรศัพท์", "warnMicCut": "ไมค์ถูกระบบตัด คนอื่นไม่ได้ยินคุณ", "warnMicCutSub": "เปิดหน้านี้ค้างไว้บนหน้าจอ หรือแตะที่นี่เพื่อเปิดไมค์ใหม่", "hintNative": "สลับไปเล่นเกมได้เลย ไมค์ยังทำงานเบื้องหลัง (มีแจ้งเตือนค้างไว้)", "hintNoMic": "ไม่ได้รับอนุญาตให้ใช้ไมค์ ตอนนี้ฟังได้อย่างเดียว เปิดสิทธิ์ไมค์ของเบราว์เซอร์แล้วรีเฟรชหน้านี้", "iosTitle": "สำหรับ iPhone / iPad", "iosTip": "iOS จะตัดไมค์ของเว็บเมื่อสลับไปแอปอื่น จึงต้องเปิดหน้านี้ค้างไว้ (iPad แบ่งจอได้) แตะปุ่มแชร์ แล้วเลือก \"เพิ่มลงในหน้าจอโฮม\" เพื่อเปิดแบบเต็มจอ", "linkStop": "หยุดใช้งาน", "linkBatt": "กันระบบปิดแอปเบื้องหลัง", "unlink": "ยกเลิกการเชื่อม", "unlinkConfirm": "แตะอีกครั้งเพื่อยืนยันยกเลิกการเชื่อม", "toastReplaced": "มีอุปกรณ์อื่นเชื่อมแทนแล้ว", "toastTokenBad": "รหัสเชื่อมหมดอายุ กรุณาเชื่อมใหม่", "diagTitle": "สถานะระบบเสียง (ไว้ตรวจปัญหา)", "diagSend": "ส่งเสียงออก", "diagRecv": "รับเสียงเข้า", "diagMic": "ระดับไมค์", "diagMode": "โหมด", "diagDuck": "ลดไมค์กันสะท้อน", "diagUnit": "แพ็กเก็ต/วินาที", "modeMedia": "ปกติ", "modePhone": "โทรศัพท์", "modeWeb": "เว็บ", "yes": "ทำงานอยู่", "no": "ไม่ทำงาน"};
 const DEFAULT_THEME = {"bg": "#080519", "bg2": "#150c3d", "glow1": "rgba(139,92,246,.34)", "glow2": "rgba(56,189,248,.24)", "card": "rgba(255,255,255,.07)", "line": "rgba(255,255,255,.15)", "ink": "#ffffff", "mute": "#bdb8e3", "a": "#8b5cf6", "b": "#38bdf8", "ok": "#7dd3fc", "warn": "#fbbf24", "bad": "#fb7185"};
 const TX = { ...DEFAULT_TEXTS };
 function T(k, v) {
@@ -280,7 +290,8 @@ async function loadConfig() {
 /* ---------- สถานะ ---------- */
 const S = { linked: false, name: "", running: false, conn: "idle", online: false, mic: true, deaf: false,
   range: 15, max: 30, ns: 1, echo: "auto", gain: 1, agc: true, listen: 1, call: null,
-  speaking: false, level: 0, hear: [], micWarn: false, needTap: false };
+  speaking: false, level: 0, hear: [], micWarn: false, needTap: false,
+  diag: { sent: 0, recv: 0, mic: 0, mode: "web", duck: false } };
 let simMode = false, lastSet = 0;
 
 function toast(t) { const e = $("#toast"); e.textContent = t; e.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove("show"), 3800); }
@@ -343,6 +354,12 @@ function render() {
   $("#heard").innerHTML = S.hear.length
     ? S.hear.map((p) => `<li class="p"><div class="av" style="background:hsl(${hue(p.n)} 62% 52%)">${esc([...p.n][0] || "?")}</div><div class="nm">${esc(p.n)}${p.ph ? "<em>" + esc(T("heardPhone")) + "</em>" : ""}</div><div class="bar"><i style="width:${Math.round(p.v * 100)}%"></i></div></li>`).join("")
     : `<li class="empty">${esc(T("heardEmpty"))}</li>`;
+  const dg = S.diag || {};
+  $("#dMode").textContent = T(dg.mode === "phone" ? "modePhone" : dg.mode === "media" ? "modeMedia" : "modeWeb");
+  $("#dSend").textContent = (dg.sent || 0) + " " + T("diagUnit");
+  $("#dRecv").textContent = (dg.recv || 0) + " " + T("diagUnit");
+  $("#dMic").textContent = Math.round((dg.mic || 0) * 100) + "%";
+  $("#dDuck").textContent = T(dg.duck ? "yes" : "no");
   $("#hint").textContent = S.hintText || (NATIVE ? T("hintNative") : "");
 }
 function setLevel(v) { S.level = v; $("#orb").style.setProperty("--lvl", S.running && S.mic && !S.deaf ? Math.min(1, v) : 0); }
@@ -556,7 +573,8 @@ const web = (() => {
   const voices = new Map();
   if (token) { S.linked = true; S.name = localStorage.getItem("vc_name") || ""; }
   { const n = localStorage.getItem("vc_ns"), e = localStorage.getItem("vc_echo"); if (n !== null) S.ns = +n; if (e) S.echo = e; }
-  let dn = null, farLevel = 0;
+  let dn = null, farLevel = 0, sentN = 0, recvN = 0, diagMic = 0;
+  setInterval(() => { S.diag = { sent: sentN, recv: recvN, mic: diagMic, mode: "web", duck: S.echo !== "off" }; sentN = 0; recvN = 0; if (started) render(); }, 1000);
   const mp = new MicProcessor();
   { const l = localStorage.getItem("vc_listen"); if (l) S.listen = +l; }
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -649,14 +667,16 @@ const web = (() => {
     let q = 0; for (let i = 0; i < pcm.length; i++) { const f = pcm[i] / 32768; q += f * f; }
     const rms = Math.sqrt(q / pcm.length);
     farLevel *= 0.97;
-    const guard = S.echo !== "off" ? farLevel * 0.35 : 0; // ใช้ลำโพง: ถ้ามีคนอื่นกำลังพูดดัง ไมค์ต้องดังกว่านี้ถึงจะส่ง
-    const thr = Math.max(0.012, floor * 3.5, guard);
-    if (rms > thr) hang = now + 350; else floor = Math.max(0.002, floor * 0.995 + rms * 0.005);
+    const rmsV = rms * S.gain; // ความไวปรับตามความดังไมค์ที่ตั้ง
+    const guard = S.echo !== "off" ? Math.min(farLevel * 0.3, 0.05) : 0; // ใช้ลำโพง: มีคนอื่นพูดดัง ไมค์ต้องดังกว่านี้ถึงจะส่ง
+    const thr = Math.max(0.004, floor * 3, guard);
+    diagMic = Math.min(1, rms * 8);
+    if (rmsV > thr) hang = now + 350; else floor = Math.max(0.0015, floor * 0.995 + rmsV * 0.005);
     const active = now < hang && S.mic && !S.deaf;
     setLevel(Math.min(1, rms * 8));
     if (active !== S.speaking) { S.speaking = active; render(); }
     if (active) { mp.setManual(S.gain); mp.process(pcm, !!S.agc); }
-    if (active && ws && ws.readyState === 1 && readySent) ws.send(pcm.buffer);
+    if (active && ws && ws.readyState === 1 && readySent) { ws.send(pcm.buffer); sentN++; }
   }
 
   function connect() {
@@ -707,6 +727,7 @@ const web = (() => {
   }
   function onVoice(buf) {
     if (!ctx || ctx.state !== "running" || S.deaf || buf.byteLength < 4) return;
+    recvN++;
     const id = new DataView(buf).getUint16(0);
     const pcm = new Int16Array(buf, 2, (buf.byteLength - 2) >> 1);
     const f = new Float32Array(pcm.length); let sq = 0; for (let i = 0; i < pcm.length; i++) { f[i] = pcm[i] / 32768; sq += f[i] * f[i]; }
